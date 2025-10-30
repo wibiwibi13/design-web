@@ -1,0 +1,35 @@
+{
+  "navHome": "Beranda",
+  "navAbout": "Tentang Kami",
+  "navProduct": "Produk",
+  "navContact": "Kontak",
+    "navTeam": "Tim",
+  "navCertifications": "Sertifikasi",
+
+  "heroTitle": "Menghadirkan Kekayaan Laut Indonesia untuk Dunia",
+  "heroButton": "Lebih Dekat",
+
+  "aboutTitle": "Tentang Kami",
+  "aboutText": "PT Sari Samudera Indonesia adalah perusahaan ekspor seafood yang berkomitmen menghadirkan hasil laut terbaik dari perairan Indonesia ke pasar global dengan standar kualitas tinggi.",
+
+  "productTitle": "Produk Kami",
+  "productSubtitle": "Beberapa produk unggulan kami yang telah dipercaya oleh banyak pelanggan.",
+
+  "product1Title": "Udang Vaname",
+  "product1Desc": "Udang segar berkualitas ekspor dengan rasa manis alami dan tekstur lembut.",
+
+  "product2Title": "Cumi-Cumi",
+  "product2Desc": "Cumi-cumi segar hasil tangkapan laut dalam, cocok untuk berbagai hidangan premium.",
+
+  "product3Title": "Ikan Tuna",
+  "product3Desc": "Ikan tuna pilihan dengan kandungan protein tinggi dan kualitas ekspor terbaik.",
+
+  "footerText": "© 2025 PT Sari Samudera Indonesia. Semua hak cipta dilindungi.",
+
+    "certTitle": "Sertifikasi & Legalitas",
+  "certSubtitle": "Kami berkomitmen untuk memenuhi standar internasional dalam keamanan, mutu, dan legalitas produk ekspor kami.",
+  "cert1Title": "HACCP Certified",
+  "cert2Title": "ISO 22000",
+  "cert3Title": "FDA Approved",
+  "cert4Title": "KKP Registered"
+}

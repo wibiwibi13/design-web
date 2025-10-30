@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PT Contoh Perusahaan</title>
+
+<!-- Bootstrap Icons -->
+<!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet"> -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+
+  
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- AOS CSS untuk animasi scroll -->
+  <link href="https://cdn.jsdelivr.net/npm/aos@3.0.0-beta.6/dist/aos.css" rel="stylesheet">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <!-- Header / Navbar -->
+<nav id="navbar" class="navbar navbar-expand-lg navbar-dark bg-transparent shadow fixed-top py-3">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center" href="#">
+        <img src="assets/images/logo2.png" alt="Logo PT Contoh Perusahaan" height="60" class="me-2">
+    </a>
+    <a class="navbar-brand fw-bold text-white" href="#">Sari Samudera Indonesia</a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link text-white" href="#hero" data-key="navHome">Beranda</a></li>
+        <li class="nav-item"><a class="nav-link text-white" href="#about" data-key="navAbout">Tentang Kami</a></li>
+        <li class="nav-item"><a class="nav-link text-white" href="#product" data-key="navProduct">Produk</a></li>
+        <li class="nav-item"><a class="nav-link text-white" href="#contact" data-key="navConatct">Kontak</a></li>
+        <li class="nav-item"><a class="nav-link text-white" href="#team" data-key="navTeam">Tim</a></li>
+        <li class="nav-item"><a class="nav-link text-white" href="#certifications" data-key="navCertifications">Sertifikasi</a></li>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle text-white" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                🌐
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
+                <li><a class="dropdown-item" href="#" onclick="setLanguage('id')">Indonesia</a></li>
+                <li><a class="dropdown-item" href="#" onclick="setLanguage('en')">English</a></li>
+            </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  <!-- Hero Section -->
+<section id="hero" class="d-flex align-items-center justify-content-center text-center text-white">
+  <div class="hero-overlay px-4 py-3 rounded" data-aos="fade-up">
+    <h1 class="display-4 fw-bold" data-key="heroTitle">Dari Laut Indonesia ke Meja Dunia</h1>
+    <a href="#about" class="btn btn-outline-light btn-lg mt-3 px-4 py-2 rounded-pill shadow-sm" data-key="heroButton">
+        Pelajari Lebih Lanjut
+    </a>
+  </div>
+</section>
+
+  <!-- Tentang Kami Section -->
+  <section id="about" class="py-5">
+    <div class="container" data-aos="fade-up">
+      <div class="row">
+        <div class="col-lg-6">
+          <h2 class="fw-bold mb-4" data-key="aboutTitle">Tentang Kami</h2>
+          <p data-key="aboutText">PT Contoh Perusahaan bergerak di bidang [bidang usaha]. Kami berkomitmen memberikan
+            kualitas dan layanan terbaik. Visi kami adalah [visi perusahaan].</p>
+        </div>
+
+        <div class="col-lg-6">
+          <img src="assets/images/hero_.jpg" class="img-fluid rounded shadow" alt="Tentang Kami">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Produk Kami Section -->
+  <!-- <section id="product" class="py-5 section-blue-gradient">
+    <div class="container" data-aos="fade-up">
+      <div class="text-center mb-5">
+        <h2 class="fw-bold" data-key="productTitle">Produk Kami</h2>
+        <p class="text-muted" data-key="productSubtitle">Beberapa produk unggulan kami yang telah dipercaya oleh banyak pelanggan.</p>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="card border-0 shadow-sm h-100">
+            <img src="assets/images/product1.jpg" class="card-img-top" alt="Produk 1">
+            <div class="card-body">
+              <h5 class="card-title fw-bold" data-key="product1Title">Produk 1</h5>
+              <p class="card-text text-muted" data-key="product1Desc">Deskripsi singkat produk pertama yang menjelaskan keunggulan dan kualitasnya.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="card border-0 shadow-sm h-100">
+            <img src="assets/images/product2.jpg" class="card-img-top" alt="Produk 2">
+            <div class="card-body">
+              <h5 class="card-title fw-bold" data-key="product2Title">Produk 2</h5>
+              <p class="card-text text-muted" data-key="product2Desc">Deskripsi singkat produk kedua yang menonjolkan keandalan dan manfaatnya.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="card border-0 shadow-sm h-100">
+            <img src="assets/images/product1.jpg" class="card-img-top" alt="Produk 3">
+            <div class="card-body">
+              <h5 class="card-title fw-bold" data-key="product3Title">Produk 3</h5>
+              <p class="card-text text-muted" data-key="product3Desc">Deskripsi singkat produk ketiga yang banyak diminati oleh pelanggan kami.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section> -->
+
+
+  <section id="product" class="py-5 section-blue-gradient">
+  <div class="container" data-aos="fade-up">
+    <div class="text-center mb-5">
+      <h2 class="fw-bold" data-key="productTitle">Produk Kami</h2>
+      <p class="text-muted" data-key="productSubtitle">Beberapa produk unggulan kami yang telah dipercaya oleh banyak pelanggan.</p>
+    </div>
+
+    <div class="row g-4">
+      <!-- Produk 1 -->
+      <div class="col-md-4 col-lg-4">
+        <div class="card border-0 shadow-sm h-100">
+          <img src="assets/images/product1.jpg" class="card-img-top" alt="Produk 1">
+          <div class="card-body">
+            <h5 class="card-title fw-bold" data-key="product1Title">Produk 1</h5>
+            <p class="card-text text-muted" data-key="product1Desc">
+              Deskripsi singkat produk pertama yang menjelaskan keunggulan dan kualitasnya.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Produk 2 -->
+      <div class="col-md-4 col-lg-4">
+        <div class="card border-0 shadow-sm h-100">
+          <img src="assets/images/product2.jpg" class="card-img-top" alt="Produk 2">
+          <div class="card-body">
+            <h5 class="card-title fw-bold" data-key="product2Title">Produk 2</h5>
+            <p class="card-text text-muted" data-key="product2Desc">
+              Deskripsi singkat produk kedua yang menonjolkan keandalan dan manfaatnya.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Produk 3 -->
+      <div class="col-md-4 col-lg-4">
+        <div class="card border-0 shadow-sm h-100">
+          <img src="assets/images/product1.jpg" class="card-img-top" alt="Produk 3">
+          <div class="card-body">
+            <h5 class="card-title fw-bold" data-key="product3Title">Produk 3</h5>
+            <p class="card-text text-muted" data-key="product3Desc">
+              Deskripsi singkat produk ketiga yang banyak diminati oleh pelanggan kami.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Produk 4 -->
+      <div class="col-md-4 col-lg-4">
+        <div class="card border-0 shadow-sm h-100">
+          <img src="assets/images/product2.jpg" class="card-img-top" alt="Produk 4">
+          <div class="card-body">
+            <h5 class="card-title fw-bold" data-key="product4Title">Produk 4</h5>
+            <p class="card-text text-muted" data-key="product4Desc">
+              Produk keempat yang memiliki kualitas ekspor tinggi dan diproses dengan standar internasional.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Produk 5 -->
+      <div class="col-md-4 col-lg-4">
+        <div class="card border-0 shadow-sm h-100">
+          <img src="assets/images/product1.jpg" class="card-img-top" alt="Produk 5">
+          <div class="card-body">
+            <h5 class="card-title fw-bold" data-key="product5Title">Produk 5</h5>
+            <p class="card-text text-muted" data-key="product5Desc">
+              Produk kelima yang banyak diekspor ke berbagai negara karena keunggulan mutunya.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Produk 6 -->
+      <div class="col-md-4 col-lg-4">
+        <div class="card border-0 shadow-sm h-100">
+          <img src="assets/images/product2.jpg" class="card-img-top" alt="Produk 6">
+          <div class="card-body">
+            <h5 class="card-title fw-bold" data-key="product6Title">Produk 6</h5>
+            <p class="card-text text-muted" data-key="product6Desc">
+              Produk keenam kami yang menjadi favorit pelanggan internasional dengan harga kompetitif.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+  <!-- testing -->
+  <section id="hero2" class="d-flex align-items-center justify-content-center text-center text-white">
+  <div class="hero-overlay px-4 py-3 rounded" data-aos="fade-up">
+    <!-- <img src="assets/images/logo2.png" alt="Logo PT Contoh Perusahaan" height="720" class="me-2"> -->
+     <img src="assets/images/logo2.png" 
+     alt="Logo PT Contoh Perusahaan" 
+     class="me-2 img-fluid" 
+     style="max-height: 720px;">
+
+    <!-- <h1 class="display-4 fw-bold" data-key="heroTitle">Dari Laut Indonesia ke Meja Dunia</h1> -->
+  </div>
+</section>
+<!-- testing -->
+
+<!-- Contact Section -->
+<section id="contact" class="py-5 bg-white">
+  <div class="container" data-aos="fade-up">
+    <div class="text-center mb-5">
+      <h2 class="fw-bold">Hubungi Kami</h2>
+      <p class="text-muted">Kami siap menjawab pertanyaan dan permintaan kerja sama Anda.</p>
+    </div>
+
+    <div class="row g-4">
+      <!-- Info Kontak -->
+      <div class="col-lg-5">
+        <div class="p-4 bg-light rounded shadow-sm h-100">
+          <h5 class="fw-bold mb-3">Informasi Kontak</h5>
+          <p><i class="bi bi-geo-alt-fill text-primary me-2"></i>Jl. Pantai Utara No. 88, Jakarta, Indonesia</p>
+          <p><i class="bi bi-telephone-fill text-primary me-2"></i>+62 812 3456 7890</p>
+          <p><i class="bi bi-envelope-fill text-primary me-2"></i>info@sarisamudera.co.id</p>
+
+          <!-- <div class="mt-4">
+            <h6 class="fw-bold mb-2">Ikuti Kami</h6>
+            <a href="#" class="text-primary me-3"><i class="bi bi-facebook fs-4"></i></a>
+            <a href="#" class="text-primary me-3"><i class="bi bi-instagram fs-4"></i></a>
+            <a href="#" class="text-primary"><i class="bi bi-linkedin fs-4"></i></a>
+          </div> -->
+
+<div class="mt-4">
+  <h6 class="fw-bold mb-2">Ikuti Kami</h6>
+  <div class="d-flex flex-wrap align-items-center">
+    <a href="#" class="me-3 social-icon facebook" aria-label="Facebook">
+      <i class="bi bi-facebook fs-4"></i>
+    </a>
+    <a href="#" class="me-3 social-icon instagram" aria-label="Instagram">
+      <i class="bi bi-instagram fs-4"></i>
+    </a>
+    <a href="#" class="me-3 social-icon linkedin" aria-label="LinkedIn">
+      <i class="bi bi-linkedin fs-4"></i>
+    </a>
+    <a href="#" class="me-3 social-icon x" aria-label="X (Twitter)">
+      <i class="bi bi-twitter-x fs-4"></i>
+    </a>
+    <a href="#" class="me-3 social-icon website" aria-label="Website">
+      <i class="bi bi-globe fs-4"></i>
+    </a>
+    <a href="#" class="me-3 social-icon threads" aria-label="Threads">
+      <i class="bi bi-at fs-4"></i>
+    </a>
+    <a href="#" class="social-icon tiktok" aria-label="TikTok">
+      <i class="bi bi-tiktok fs-4"></i>
+    </a>
+  </div>
+</div>
+
+
+        </div>
+      </div>
+
+      <!-- Form Kontak -->
+      <div class="col-lg-7">
+        <form class="p-4 bg-light rounded shadow-sm">
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="name" class="form-label">Nama</label>
+              <input type="text" class="form-control" id="name" placeholder="Nama Anda">
+            </div>
+            <div class="col-md-6">
+              <label for="email" class="form-label">Email</label>
+              <input type="email" class="form-control" id="email" placeholder="Alamat Email">
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="subject" class="form-label">Subjek</label>
+            <input type="text" class="form-control" id="subject" placeholder="Judul pesan">
+          </div>
+
+          <div class="mb-3">
+            <label for="message" class="form-label">Pesan</label>
+            <textarea class="form-control" id="message" rows="5" placeholder="Tulis pesan Anda di sini"></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary px-4 py-2 rounded-pill">Kirim Pesan</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Google Maps Embed -->
+    <div class="row mt-5">
+      <div class="col-12">
+        <div class="map-responsive rounded shadow-sm overflow-hidden" data-aos="zoom-in">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.817086991226!2d106.8451318749932!3d-6.159763993823869!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f583a76c7533%3A0x2a84c53f8f86f67a!2sPelabuhan%20Perikanan%20Samudera%20Jakarta!5e0!3m2!1sid!2sid!4v1730270000000!5m2!1sid!2sid"
+            width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- Team Section -->
+<section id="team" class="py-5 bg-light">
+  <div class="container" data-aos="zoom-in-up">
+    <div class="text-center mb-5">
+      <h2 class="fw-bold">Tim Kami</h2>
+      <p class="text-muted">Berpengalaman, berdedikasi, dan siap membawa hasil laut Indonesia ke dunia.</p>
+    </div>
+
+    <div class="row g-4 justify-content-center">
+      <!-- Anggota 1 -->
+      <div class="col-md-3 col-sm-6">
+        <div class="team-card position-relative overflow-hidden shadow-sm">
+          <img src="assets/images/team1.jpg" class="img-fluid team-img" alt="CEO">
+          <div class="team-overlay d-flex flex-column justify-content-center align-items-center">
+            <h5 class="text-white fw-bold mb-1">Budi Santoso</h5>
+            <p class="text-light mb-0">CEO & Founder</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Anggota 2 -->
+      <div class="col-md-3 col-sm-6">
+        <div class="team-card position-relative overflow-hidden shadow-sm">
+          <img src="assets/images/team2.jpg" class="img-fluid team-img" alt="Manager">
+          <div class="team-overlay d-flex flex-column justify-content-center align-items-center">
+            <h5 class="text-white fw-bold mb-1">Sari Widya</h5>
+            <p class="text-light mb-0">Export Manager</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Anggota 3 -->
+      <div class="col-md-3 col-sm-6">
+        <div class="team-card position-relative overflow-hidden shadow-sm">
+          <img src="assets/images/team3.jpg" class="img-fluid team-img" alt="QC Supervisor">
+          <div class="team-overlay d-flex flex-column justify-content-center align-items-center">
+            <h5 class="text-white fw-bold mb-1">Andi Pratama</h5>
+            <p class="text-light mb-0">Quality Control</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Anggota 4 -->
+      <div class="col-md-3 col-sm-6">
+        <div class="team-card position-relative overflow-hidden shadow-sm">
+          <img src="assets/images/team4.jpg" class="img-fluid team-img" alt="Marketing">
+          <div class="team-overlay d-flex flex-column justify-content-center align-items-center">
+            <h5 class="text-white fw-bold mb-1">Lestari Dewi</h5>
+            <p class="text-light mb-0">Marketing Executive</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+<!-- Sertifikasi & Legalitas Section -->
+<section id="certifications" class="py-5 bg-white position-relative overflow-hidden">
+  <div class="container" data-aos="zoom-in-up" data-aos-duration="1500">
+    <div class="text-center mb-5">
+      <h2 class="fw-bold text-primary" data-key="certTitle">Sertifikasi & Legalitas</h2>
+      <p class="text-muted" data-key="certSubtitle">
+        Kami berkomitmen untuk memenuhi standar internasional dalam keamanan, mutu, dan legalitas produk ekspor kami.
+      </p>
+    </div>
+
+    <div class="row g-4 justify-content-center">
+      <div class="col-md-3 col-sm-6">
+        <div class="card border-0 shadow-sm text-center p-4 cert-card">
+          <i class="bi bi-shield-check text-success fs-1 mb-3"></i>
+          <h5 class="fw-bold" data-key="cert1Title">HACCP Certified</h5>
+        </div>
+      </div>
+
+      <div class="col-md-3 col-sm-6">
+        <div class="card border-0 shadow-sm text-center p-4 cert-card">
+          <i class="bi bi-patch-check-fill text-primary fs-1 mb-3"></i>
+          <h5 class="fw-bold" data-key="cert2Title">ISO 22000</h5>
+        </div>
+      </div>
+
+      <div class="col-md-3 col-sm-6">
+        <div class="card border-0 shadow-sm text-center p-4 cert-card">
+          <i class="bi bi-building-check text-info fs-1 mb-3"></i>
+          <h5 class="fw-bold" data-key="cert3Title">FDA Approved</h5>
+        </div>
+      </div>
+
+      <div class="col-md-3 col-sm-6">
+        <div class="card border-0 shadow-sm text-center p-4 cert-card">
+          <i class="bi bi-award-fill text-warning fs-1 mb-3"></i>
+          <h5 class="fw-bold" data-key="cert4Title">KKP Registered</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+  <!-- Footer -->
+  <footer id="footer" class="bg-light py-4">
+    <div class="container text-center">
+      <p class="mb-0" data-key="footerText">&copy; 2025 PT Contoh Perusahaan. All rights reserved.</p>
+    </div>
+  </footer>
+
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/6281234567890" 
+        class="whatsapp-float" 
+        target="_blank" 
+        aria-label="Chat via WhatsApp">
+        <i class="bi bi-whatsapp"></i>
+    </a>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- AOS JS -->
+  <script src="https://cdn.jsdelivr.net/npm/aos@3.0.0-beta.6/dist/aos.js"></script>
+  <!-- Custom JS -->
+  <script src="assets/js/script.js"></script>
+  <script src="assets/js/lang.js"></script>
+</body>
+</html>

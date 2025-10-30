@@ -1,0 +1,275 @@
+/* Reset margin */
+body, html {
+  margin: 0;
+  padding: 0;
+  scroll-behavior: smooth;
+}
+
+/* Navbar smooth hide + gradient */
+.navbar {
+  transition: top 0.5s, background 0.5s;
+  background: linear-gradient(90deg, #0077b6, #00b4d8); /* biru laut gradient */
+}
+
+/* Saat navbar transparan di hero section (opsional efek awal) */
+.navbar.bg-transparent {
+  background: linear-gradient(90deg, rgba(0,119,182,0.9), rgba(0,180,216,0.9));
+}
+
+/* Navbar link hover */
+.nav-link:hover {
+  opacity: 0.8;
+}
+
+/* Hero Section */
+#hero {
+  height: 100vh;
+  background-image: url('../images/hero-bg.jpg');
+  background-size: cover;
+  background-attachment: fixed; /* parallax */
+  background-position: center;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#hero2 {
+  height: 100vh;
+  background-image: url('../images/hero-bg2.jpg');
+  background-size: cover;
+  background-attachment: fixed; /* parallax */
+  background-position: center;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+/* Section spacing */
+section {
+  padding: 100px 0;
+}
+
+/* Footer styling */
+footer {
+  background-color: #f8f9fa;
+}
+
+/* Produk Section */
+#product {
+  background-color: #f8f9fa;
+}
+
+#product .card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#product .card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+
+.hero-overlay {
+  background: rgba(0, 0, 0, 0.5); /* hitam transparan */
+  display: inline-block;
+  border-radius: 10px;
+}
+
+#hero h1 {
+  color: #ffff;
+}
+
+.btn-outline-light {
+  backdrop-filter: blur(4px);
+  transition: all 0.3s ease;
+}
+
+.btn-outline-light:hover {
+  background-color: rgba(112, 161, 207, 0.2);
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.navbar-brand img {
+  transition: transform 0.3s ease;
+}
+
+.navbar-brand img:hover {
+  transform: scale(1.05);
+}
+
+@media (max-width: 576px) {
+  .navbar-brand img {
+    height: 35px;
+  }
+}
+
+.section-blue-gradient {
+  background: linear-gradient(180deg, #e3f2fd 0%, #bbdefb 100%);
+}
+
+.section-blue h2,
+.section-blue-gradient h2 {
+  color: #004b8d; /* biru laut tua */
+}
+
+.section-blue p,
+.section-blue-gradient p {
+  color: #084d7f;
+}
+
+.dropdown-menu {
+  min-width: 130px;
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.map-responsive {
+  position: relative;
+  overflow: hidden;
+  padding-bottom: 56.25%; /* Rasio 16:9 */
+  height: 0;
+}
+
+.map-responsive iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Floating WhatsApp Button */
+.whatsapp-float {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  background-color: #25D366;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  z-index: 9999;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.whatsapp-float:hover {
+  background-color: #20ba5a;
+  transform: scale(1.1);
+  color: white;
+  text-decoration: none;
+}
+
+/* Sertifikasi Section Style */
+.cert-card {
+  transition: transform 0.4s ease, box-shadow 0.3s ease;
+  background: #f9f9f9;
+  border-radius: 15px;
+}
+.cert-card:hover {
+  transform: scale(1.08);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+#certifications {
+  background: linear-gradient(180deg, #ffffff 0%, #f2f8ff 100%);
+}
+
+  /* Warna ikon default sesuai brand */
+  .social-icon {
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+  .social-icon:hover {
+    transform: scale(1.2);
+    opacity: 0.8;
+  }
+
+  .social-icon.facebook { color: #1877F2; }   /* Biru Facebook */
+  .social-icon.instagram { color: #E1306C; }  /* Pink Instagram */
+  .social-icon.linkedin { color: #0A66C2; }   /* Biru LinkedIn */
+  .social-icon.x { color: #000000; }          /* Hitam X (Twitter) */
+  .social-icon.website { color: #3B82F6; }    /* Biru Netral (Website) */
+  .social-icon.threads { color: #000000; }    /* Hitam Threads */
+  .social-icon.tiktok { color: #69C9D0; }     /* Cyan TikTok */
+
+  /* === TEAM SECTION === */
+.team-card {
+  border-radius: 15px;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.team-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 25px rgba(0, 123, 255, 0.2);
+}
+
+.team-img {
+  width: 100%;
+  border-radius: 15px;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.team-card:hover .team-img {
+  transform: scale(1.1);
+  filter: brightness(0.5);
+}
+
+.team-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 123, 255, 0.7);
+  opacity: 0;
+  border-radius: 15px;
+  transition: opacity 0.4s ease;
+}
+
+.team-card:hover .team-overlay {
+  opacity: 1;
+}
+
+.team-overlay h5, .team-overlay p {
+  transform: translateY(20px);
+  opacity: 0;
+  transition: all 0.4s ease;
+}
+
+.team-card:hover .team-overlay h5,
+.team-card:hover .team-overlay p {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Ukuran logo default (desktop) */
+.navbar-brand img {
+  height: 70px;
+  transition: all 0.3s ease;
+}
+
+/* Untuk layar tablet dan lebih kecil */
+@media (max-width: 992px) {
+  .navbar-brand img {
+    height: 55px;
+  }
+}
+
+/* Untuk layar HP */
+@media (max-width: 576px) {
+  .navbar-brand img {
+    height: 40px;
+  }
+}
+
+

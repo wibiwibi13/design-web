@@ -1,0 +1,35 @@
+{
+  "navHome": "Home",
+  "navAbout": "About Us",
+  "navProduct": "Products",
+  "navContact": "Contact",
+  "navTeam": "Team",
+  "navCertifications": "Certifications",
+
+  "heroTitle": "Bringing the Richness of Indonesian Seas to the World",
+  "heroButton": "Learn More",
+
+  "aboutTitle": "About Us",
+  "aboutText": "PT Sari Samudera Indonesia is a seafood export company committed to delivering the finest catch from Indonesian waters to global markets with the highest quality standards.",
+
+  "productTitle": "Our Products",
+  "productSubtitle": "Some of our premium seafood products trusted by clients worldwide.",
+
+  "product1Title": "Vannamei Shrimp",
+  "product1Desc": "Fresh export-grade shrimp with natural sweetness and smooth texture.",
+
+  "product2Title": "Squid",
+  "product2Desc": "Deep-sea fresh squid, ideal for a variety of premium dishes.",
+
+  "product3Title": "Tuna Fish",
+  "product3Desc": "High-protein, premium-quality tuna fish for export markets.",
+
+  "footerText": "© 2025 PT Sari Samudera Indonesia. All rights reserved.",
+
+  "certTitle": "Certifications & Legal Compliance",
+  "certSubtitle": "We are committed to meeting international standards for safety, quality, and legal compliance in our export products.",
+  "cert1Title": "HACCP Certified",
+  "cert2Title": "ISO 22000",
+  "cert3Title": "FDA Approved",
+  "cert4Title": "KKP Registered"
+}

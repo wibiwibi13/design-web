@@ -1,459 +1,473 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PT Contoh Perusahaan</title>
+<meta charset="UTF-8">
+<title>Isi Piringku</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Segoe UI',sans-serif; background:linear-gradient(135deg,#a8e6cf,#dcedc1); min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:20px; }
 
-<!-- Bootstrap Icons -->
-<!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet"> -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+#startScreen {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(160deg,#74c69d,#b7e4c7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  padding: 20px;
+}
+.startCard {
+  background: #fff;
+  padding: 60px 70px;
+  border-radius: 30px;
+  text-align: center;
+  width: 100%;
+  max-width: 900px;
+  min-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,.25);
+}
 
+.startCard h1 { color:#2d6a4f; margin:15px 0; font-size:56px; }
+.startCard p  { color:#555; font-size:22px; line-height:1.9; margin-bottom:35px; }
 
-  
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- AOS CSS untuk animasi scroll -->
-  <link href="https://cdn.jsdelivr.net/npm/aos@3.0.0-beta.6/dist/aos.css" rel="stylesheet">
-  <!-- Custom CSS -->
-  <link rel="stylesheet" href="assets/css/style.css">
+#btnStart {
+  background:#2d6a4f; color:#fff; border:none;
+  padding:20px 70px;
+  font-size:26px; font-weight:bold;
+  border-radius:50px; cursor:pointer;
+  transition:transform .2s, background .2s;
+}
+#btnStart:hover { background:#1b4332; transform:scale(1.05); }
+
+#gameScreen { display:none; width:100%; max-width:1400px; flex-direction:column; align-items:center; }
+#gameArea { display:flex; gap:40px; justify-content:center; align-items:center; flex-wrap:wrap; margin-top:10px; }
+
+/* gambar makanan di nampan & di piring */
+.foodImg    { width:48px; height:48px; object-fit:contain; display:block; margin:0 auto; }
+.zoneItems img { width:52px; height:52px; object-fit:contain; vertical-align:middle; margin:2px; }
+
+#foodTray { width:640px; background:#fffdf5; border-radius:20px; padding:15px; border:3px solid #e8ddc0; box-shadow:0 8px 20px rgba(0,0,0,.12); }
+#foodTray h3 { text-align:center; color:#7f5539; margin-bottom:10px; }
+#foods { display:grid; grid-template-columns:repeat(6,1fr); gap:10px; }
+.food { text-align:center; padding:10px 4px; border-radius:14px; background:#fff; cursor:grab; user-select:none; box-shadow:0 3px 6px rgba(0,0,0,.08); }
+.food:hover { transform:scale(1.1); }
+.food.selected { outline:4px solid #d62828; background:#ffe5e5; }
+.food.placed { visibility:hidden; }
+.foodName { font-size:12px; display:block; color:#555; margin-top:2px; }
+.foodEmoji { font-size:40px; }
+
+#plateWrap { width:640px; height:640px; position:relative; }
+#plate { width:600px; height:600px; border-radius:50%; position:absolute; top:10px; left:10px;
+  background:radial-gradient(circle at center,#fff 55%,#ececec 78%,#dcdcdc 88%,#fff 92%,#e8e8e8 100%);
+  box-shadow:0 15px 35px rgba(0,0,0,.22), inset 0 0 0 22px #fafafa; }
+
+/* ===== SEKTOR TAK TERLIHAT (area drop) ===== */
+#plateSvg { position:absolute; top:10px; left:10px; width:600px; height:600px; z-index:5; }
+.sector { fill:transparent; cursor:pointer; transition:fill .15s; }
+.sector.highlight { fill:rgba(45,106,79,.15); }
+.sector.wrong { fill:rgba(214,40,40,.25); }
+
+/* garis titik-titik hitam seperti gambar */
+.dotline { stroke:#111; stroke-width:1.8; stroke-dasharray:0.1 2.6;
+           stroke-linecap:round; fill:none; }
+
+/* label & emoji di tengah tiap bagian */
+.zoneContent { position:absolute; display:flex; flex-direction:column; align-items:center;
+               transform:translate(-50%,-50%); pointer-events:none; z-index:7; text-align:center; }
+.zoneLabel { font-size:17px; font-weight:bold; color:#666; }
+.zonePorsi { font-size:13px; color:#aaa; }
+.zoneItems { font-size:44px; margin-top:8px; max-width:90%; }
+
+#notification { margin-top:15px; min-height:50px; max-width:900px; width:100%; padding:12px; border-radius:12px; text-align:center; display:none; font-size:16px; }
+.notif-error { background:#fee2e2; color:#991b1b; display:block; }
+.notif-success { background:#dcfce7; color:#166534; display:block; }
+
+button.ctl { background:#2d6a4f; color:#fff; border:none; padding:10px 26px; border-radius:25px; cursor:pointer; font-weight:bold; margin-top:12px; }
+
+#winOverlay { position:fixed; inset:0; background:rgba(0,0,0,.6); display:none; align-items:center; justify-content:center; z-index:100; }
+.winCard { background:#fff; padding:40px; border-radius:22px; text-align:center; max-width:420px; animation:popUp .4s ease; }
+@keyframes popUp { from{transform:scale(.5); opacity:0;} to{transform:scale(1); opacity:1;} }
+.winCard h2 { color:#2d6a4f; margin:10px 0; }
+.winCard p { color:#444; font-size:14px; line-height:1.7; margin-bottom:20px; }
+
+.food.dragging { opacity:.4; transform:scale(.9); cursor:grabbing; }
+.zoneItems .popIn { display:inline-block; animation:popIn .3s ease; }
+
+@media (max-width:1400px) {
+  #plateWrap { width:520px; height:520px; }
+  #plate { width:480px; height:480px; }
+  #plateSvg { width:480px; height:480px; }
+  #foodTray { width:520px; }
+  .zoneLabel { font-size:14px; }
+  .zoneItems { font-size:34px; }
+}
+</style>
 </head>
 <body>
 
-  <!-- Header / Navbar -->
-<nav id="navbar" class="navbar navbar-expand-lg navbar-dark bg-transparent shadow fixed-top py-3">
-  <div class="container">
-    <a class="navbar-brand d-flex align-items-center" href="#">
-        <img src="assets/images/logo2.png" alt="Logo PT Contoh Perusahaan" height="60" class="me-2">
-    </a>
-    <a class="navbar-brand fw-bold text-white" href="#">Sari Samudera Indonesia</a>
-
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto">
-        <li class="nav-item"><a class="nav-link text-white" href="#hero" data-key="navHome">Beranda</a></li>
-        <li class="nav-item"><a class="nav-link text-white" href="#about" data-key="navAbout">Tentang Kami</a></li>
-        <li class="nav-item"><a class="nav-link text-white" href="#product" data-key="navProduct">Produk</a></li>
-        <li class="nav-item"><a class="nav-link text-white" href="#contact" data-key="navConatct">Kontak</a></li>
-        <li class="nav-item"><a class="nav-link text-white" href="#team" data-key="navTeam">Tim</a></li>
-        <li class="nav-item"><a class="nav-link text-white" href="#certifications" data-key="navCertifications">Sertifikasi</a></li>
-        <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle text-white" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                🌐
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
-                <li><a class="dropdown-item" href="#" onclick="setLanguage('id')">Indonesia</a></li>
-                <li><a class="dropdown-item" href="#" onclick="setLanguage('en')">English</a></li>
-            </ul>
-        </li>
-      </ul>
-    </div>
-  </div>
-</nav>
-
-  <!-- Hero Section -->
-<section id="hero" class="d-flex align-items-center justify-content-center text-center text-white">
-  <div class="hero-overlay px-4 py-3 rounded" data-aos="fade-up">
-    <h1 class="display-4 fw-bold" data-key="heroTitle">Dari Laut Indonesia ke Meja Dunia</h1>
-    <a href="#about" class="btn btn-outline-light btn-lg mt-3 px-4 py-2 rounded-pill shadow-sm" data-key="heroButton">
-        Pelajari Lebih Lanjut
-    </a>
-  </div>
-</section>
-
-  <!-- Tentang Kami Section -->
-  <section id="about" class="py-5">
-    <div class="container" data-aos="fade-up">
-      <div class="row">
-        <div class="col-lg-6">
-          <h2 class="fw-bold mb-4" data-key="aboutTitle">Tentang Kami</h2>
-          <p data-key="aboutText">PT Contoh Perusahaan bergerak di bidang [bidang usaha]. Kami berkomitmen memberikan
-            kualitas dan layanan terbaik. Visi kami adalah [visi perusahaan].</p>
-        </div>
-
-        <div class="col-lg-6">
-          <img src="assets/images/hero_.jpg" class="img-fluid rounded shadow" alt="Tentang Kami">
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Produk Kami Section -->
-  <!-- <section id="product" class="py-5 section-blue-gradient">
-    <div class="container" data-aos="fade-up">
-      <div class="text-center mb-5">
-        <h2 class="fw-bold" data-key="productTitle">Produk Kami</h2>
-        <p class="text-muted" data-key="productSubtitle">Beberapa produk unggulan kami yang telah dipercaya oleh banyak pelanggan.</p>
-      </div>
-
-      <div class="row g-4">
-        <div class="col-md-4">
-          <div class="card border-0 shadow-sm h-100">
-            <img src="assets/images/product1.jpg" class="card-img-top" alt="Produk 1">
-            <div class="card-body">
-              <h5 class="card-title fw-bold" data-key="product1Title">Produk 1</h5>
-              <p class="card-text text-muted" data-key="product1Desc">Deskripsi singkat produk pertama yang menjelaskan keunggulan dan kualitasnya.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-4">
-          <div class="card border-0 shadow-sm h-100">
-            <img src="assets/images/product2.jpg" class="card-img-top" alt="Produk 2">
-            <div class="card-body">
-              <h5 class="card-title fw-bold" data-key="product2Title">Produk 2</h5>
-              <p class="card-text text-muted" data-key="product2Desc">Deskripsi singkat produk kedua yang menonjolkan keandalan dan manfaatnya.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-4">
-          <div class="card border-0 shadow-sm h-100">
-            <img src="assets/images/product1.jpg" class="card-img-top" alt="Produk 3">
-            <div class="card-body">
-              <h5 class="card-title fw-bold" data-key="product3Title">Produk 3</h5>
-              <p class="card-text text-muted" data-key="product3Desc">Deskripsi singkat produk ketiga yang banyak diminati oleh pelanggan kami.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section> -->
-
-
-  <section id="product" class="py-5 section-blue-gradient">
-  <div class="container" data-aos="fade-up">
-    <div class="text-center mb-5">
-      <h2 class="fw-bold" data-key="productTitle">Produk Kami</h2>
-      <p class="text-muted" data-key="productSubtitle">Beberapa produk unggulan kami yang telah dipercaya oleh banyak pelanggan.</p>
-    </div>
-
-    <div class="row g-4">
-      <!-- Produk 1 -->
-      <div class="col-md-4 col-lg-4">
-        <div class="card border-0 shadow-sm h-100">
-          <img src="assets/images/product1.jpg" class="card-img-top" alt="Produk 1">
-          <div class="card-body">
-            <h5 class="card-title fw-bold" data-key="product1Title">Produk 1</h5>
-            <p class="card-text text-muted" data-key="product1Desc">
-              Deskripsi singkat produk pertama yang menjelaskan keunggulan dan kualitasnya.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Produk 2 -->
-      <div class="col-md-4 col-lg-4">
-        <div class="card border-0 shadow-sm h-100">
-          <img src="assets/images/product2.jpg" class="card-img-top" alt="Produk 2">
-          <div class="card-body">
-            <h5 class="card-title fw-bold" data-key="product2Title">Produk 2</h5>
-            <p class="card-text text-muted" data-key="product2Desc">
-              Deskripsi singkat produk kedua yang menonjolkan keandalan dan manfaatnya.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Produk 3 -->
-      <div class="col-md-4 col-lg-4">
-        <div class="card border-0 shadow-sm h-100">
-          <img src="assets/images/product1.jpg" class="card-img-top" alt="Produk 3">
-          <div class="card-body">
-            <h5 class="card-title fw-bold" data-key="product3Title">Produk 3</h5>
-            <p class="card-text text-muted" data-key="product3Desc">
-              Deskripsi singkat produk ketiga yang banyak diminati oleh pelanggan kami.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Produk 4 -->
-      <div class="col-md-4 col-lg-4">
-        <div class="card border-0 shadow-sm h-100">
-          <img src="assets/images/product2.jpg" class="card-img-top" alt="Produk 4">
-          <div class="card-body">
-            <h5 class="card-title fw-bold" data-key="product4Title">Produk 4</h5>
-            <p class="card-text text-muted" data-key="product4Desc">
-              Produk keempat yang memiliki kualitas ekspor tinggi dan diproses dengan standar internasional.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Produk 5 -->
-      <div class="col-md-4 col-lg-4">
-        <div class="card border-0 shadow-sm h-100">
-          <img src="assets/images/product1.jpg" class="card-img-top" alt="Produk 5">
-          <div class="card-body">
-            <h5 class="card-title fw-bold" data-key="product5Title">Produk 5</h5>
-            <p class="card-text text-muted" data-key="product5Desc">
-              Produk kelima yang banyak diekspor ke berbagai negara karena keunggulan mutunya.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Produk 6 -->
-      <div class="col-md-4 col-lg-4">
-        <div class="card border-0 shadow-sm h-100">
-          <img src="assets/images/product2.jpg" class="card-img-top" alt="Produk 6">
-          <div class="card-body">
-            <h5 class="card-title fw-bold" data-key="product6Title">Produk 6</h5>
-            <p class="card-text text-muted" data-key="product6Desc">
-              Produk keenam kami yang menjadi favorit pelanggan internasional dengan harga kompetitif.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-
-  <!-- testing -->
-  <section id="hero2" class="d-flex align-items-center justify-content-center text-center text-white">
-  <div class="hero-overlay px-4 py-3 rounded" data-aos="fade-up">
-    <!-- <img src="assets/images/logo2.png" alt="Logo PT Contoh Perusahaan" height="720" class="me-2"> -->
-     <img src="assets/images/logo2.png" 
-     alt="Logo PT Contoh Perusahaan" 
-     class="me-2 img-fluid" 
-     style="max-height: 720px;">
-
-    <!-- <h1 class="display-4 fw-bold" data-key="heroTitle">Dari Laut Indonesia ke Meja Dunia</h1> -->
-  </div>
-</section>
-<!-- testing -->
-
-<!-- Contact Section -->
-<section id="contact" class="py-5 bg-white">
-  <div class="container" data-aos="fade-up">
-    <div class="text-center mb-5">
-      <h2 class="fw-bold">Hubungi Kami</h2>
-      <p class="text-muted">Kami siap menjawab pertanyaan dan permintaan kerja sama Anda.</p>
-    </div>
-
-    <div class="row g-4">
-      <!-- Info Kontak -->
-      <div class="col-lg-5">
-        <div class="p-4 bg-light rounded shadow-sm h-100">
-          <h5 class="fw-bold mb-3">Informasi Kontak</h5>
-          <p><i class="bi bi-geo-alt-fill text-primary me-2"></i>Jl. Pantai Utara No. 88, Jakarta, Indonesia</p>
-          <p><i class="bi bi-telephone-fill text-primary me-2"></i>+62 812 3456 7890</p>
-          <p><i class="bi bi-envelope-fill text-primary me-2"></i>info@sarisamudera.co.id</p>
-
-          <!-- <div class="mt-4">
-            <h6 class="fw-bold mb-2">Ikuti Kami</h6>
-            <a href="#" class="text-primary me-3"><i class="bi bi-facebook fs-4"></i></a>
-            <a href="#" class="text-primary me-3"><i class="bi bi-instagram fs-4"></i></a>
-            <a href="#" class="text-primary"><i class="bi bi-linkedin fs-4"></i></a>
-          </div> -->
-
-<div class="mt-4">
-  <h6 class="fw-bold mb-2">Ikuti Kami</h6>
-  <div class="d-flex flex-wrap align-items-center">
-    <a href="#" class="me-3 social-icon facebook" aria-label="Facebook">
-      <i class="bi bi-facebook fs-4"></i>
-    </a>
-    <a href="#" class="me-3 social-icon instagram" aria-label="Instagram">
-      <i class="bi bi-instagram fs-4"></i>
-    </a>
-    <a href="#" class="me-3 social-icon linkedin" aria-label="LinkedIn">
-      <i class="bi bi-linkedin fs-4"></i>
-    </a>
-    <a href="#" class="me-3 social-icon x" aria-label="X (Twitter)">
-      <i class="bi bi-twitter-x fs-4"></i>
-    </a>
-    <a href="#" class="me-3 social-icon website" aria-label="Website">
-      <i class="bi bi-globe fs-4"></i>
-    </a>
-    <a href="#" class="me-3 social-icon threads" aria-label="Threads">
-      <i class="bi bi-at fs-4"></i>
-    </a>
-    <a href="#" class="social-icon tiktok" aria-label="TikTok">
-      <i class="bi bi-tiktok fs-4"></i>
-    </a>
+<div id="startScreen">
+  <div class="startCard">
+    <img src="ipb.png" alt="Logo IPB"
+     style="width:100px; height:auto; margin-bottom:15px;"
+     onerror="this.style.display='none'">
+    <div style="font-size:110px">🍽️</div>
+    <h1>Isi Piringku</h1>
+    <p>
+      Belajar makan sehat sesuai pedoman gizi seimbang:<br>
+      🍚 Makanan Pokok 1/3 &nbsp;•&nbsp; 🥬 Sayuran 1/3<br>
+      🍗 Lauk-Pauk 1/6 &nbsp;•&nbsp; 🍎 Buah 1/6<br><br>
+      Geser atau ketuk makanan ke bagian piring yang tepat.<br>
+      Isi <b>semua 4 bagian piring</b> untuk menang!<br>
+      Hati-hati ada makanan jebakan!
+    </p>
+    <button id="btnStart">MULAI BERMAIN</button>
   </div>
 </div>
 
-
-        </div>
-      </div>
-
-      <!-- Form Kontak -->
-      <div class="col-lg-7">
-        <form class="p-4 bg-light rounded shadow-sm">
-          <div class="row mb-3">
-            <div class="col-md-6">
-              <label for="name" class="form-label">Nama</label>
-              <input type="text" class="form-control" id="name" placeholder="Nama Anda">
-            </div>
-            <div class="col-md-6">
-              <label for="email" class="form-label">Email</label>
-              <input type="email" class="form-control" id="email" placeholder="Alamat Email">
-            </div>
-          </div>
-
-          <div class="mb-3">
-            <label for="subject" class="form-label">Subjek</label>
-            <input type="text" class="form-control" id="subject" placeholder="Judul pesan">
-          </div>
-
-          <div class="mb-3">
-            <label for="message" class="form-label">Pesan</label>
-            <textarea class="form-control" id="message" rows="5" placeholder="Tulis pesan Anda di sini"></textarea>
-          </div>
-
-          <button type="submit" class="btn btn-primary px-4 py-2 rounded-pill">Kirim Pesan</button>
-        </form>
-      </div>
+<div id="gameScreen">
+  <h1 style="color:#2d6a4f">🍽️ Isi Piringku!</h1>
+  <div id="gameArea">
+    <div id="foodTray">
+      <h3>🧺 Nampan Makanan</h3>
+      <div id="foods"></div>
     </div>
+    <div id="plateWrap">
+      <div id="plate"></div>
 
-    <!-- Google Maps Embed -->
-    <div class="row mt-5">
-      <div class="col-12">
-        <div class="map-responsive rounded shadow-sm overflow-hidden" data-aos="zoom-in">
-          <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.817086991226!2d106.8451318749932!3d-6.159763993823869!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f583a76c7533%3A0x2a84c53f8f86f67a!2sPelabuhan%20Perikanan%20Samudera%20Jakarta!5e0!3m2!1sid!2sid!4v1730270000000!5m2!1sid!2sid"
-            width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade">
-          </iframe>
-        </div>
+      <!-- Area drop tak terlihat (4 sektor) + garis titik-titik -->
+      <svg id="plateSvg" viewBox="0 0 100 100">
+
+        <!-- ===== SEKTOR TAK TERLIHAT (hanya untuk klik & drop) ===== -->
+        <!-- Makanan Pokok 1/3 : kiri-atas -->
+        <path class="sector" id="zPokok" data-kat="pokok"
+              d="M 50 50 L 50 7 A 43 43 0 0 0 12.78 71.5 Z"/>
+        <!-- Sayuran 1/3 : kanan-atas -->
+        <path class="sector" id="zSayur" data-kat="sayur"
+              d="M 50 50 L 50 7 A 43 43 0 0 1 87.22 71.5 Z"/>
+        <!-- Lauk-Pauk 1/6 : kiri-bawah -->
+        <path class="sector" id="zLauk" data-kat="lauk"
+              d="M 50 50 L 12.78 71.5 A 43 43 0 0 0 50 93 Z"/>
+        <!-- Buah-Buahan 1/6 : kanan-bawah -->
+        <path class="sector" id="zBuah" data-kat="buah"
+              d="M 50 50 L 87.22 71.5 A 43 43 0 0 1 50 93 Z"/>
+
+        <!-- ===== GARIS TITIK-TITIK (seperti gambar) ===== -->
+        <!-- garis vertikal dari atas ke bawah -->
+        <line class="dotline" x1="50" y1="5" x2="50" y2="95"/>
+        <!-- garis miring dari tengah ke kiri-bawah -->
+        <line class="dotline" x1="50" y1="50" x2="12.78" y2="71.5"/>
+        <!-- garis miring dari tengah ke kanan-bawah -->
+        <line class="dotline" x1="50" y1="50" x2="87.22" y2="71.5"/>
+      </svg>
+
+      <!-- Label & isi di tengah tiap bagian -->
+      <div class="zoneContent" style="left:31%; top:32%;">
+        <span class="zoneLabel">Makanan Pokok</span>
+        <span class="zonePorsi">1/3</span>
+        <div class="zoneItems" id="iPokok"></div>
       </div>
-    </div>
-  </div>
-</section>
-
-
-
-<!-- Team Section -->
-<section id="team" class="py-5 bg-light">
-  <div class="container" data-aos="zoom-in-up">
-    <div class="text-center mb-5">
-      <h2 class="fw-bold">Tim Kami</h2>
-      <p class="text-muted">Berpengalaman, berdedikasi, dan siap membawa hasil laut Indonesia ke dunia.</p>
-    </div>
-
-    <div class="row g-4 justify-content-center">
-      <!-- Anggota 1 -->
-      <div class="col-md-3 col-sm-6">
-        <div class="team-card position-relative overflow-hidden shadow-sm">
-          <img src="assets/images/team1.jpg" class="img-fluid team-img" alt="CEO">
-          <div class="team-overlay d-flex flex-column justify-content-center align-items-center">
-            <h5 class="text-white fw-bold mb-1">Budi Santoso</h5>
-            <p class="text-light mb-0">CEO & Founder</p>
-          </div>
-        </div>
+      <div class="zoneContent" style="left:69%; top:32%;">
+        <span class="zoneLabel">Sayuran</span>
+        <span class="zonePorsi">1/3</span>
+        <div class="zoneItems" id="iSayur"></div>
       </div>
-
-      <!-- Anggota 2 -->
-      <div class="col-md-3 col-sm-6">
-        <div class="team-card position-relative overflow-hidden shadow-sm">
-          <img src="assets/images/team2.jpg" class="img-fluid team-img" alt="Manager">
-          <div class="team-overlay d-flex flex-column justify-content-center align-items-center">
-            <h5 class="text-white fw-bold mb-1">Sari Widya</h5>
-            <p class="text-light mb-0">Export Manager</p>
-          </div>
-        </div>
+      <div class="zoneContent" style="left:30%; top:74%;">
+        <span class="zoneLabel">Lauk-Pauk</span>
+        <span class="zonePorsi">1/6</span>
+        <div class="zoneItems" id="iLauk"></div>
       </div>
-
-      <!-- Anggota 3 -->
-      <div class="col-md-3 col-sm-6">
-        <div class="team-card position-relative overflow-hidden shadow-sm">
-          <img src="assets/images/team3.jpg" class="img-fluid team-img" alt="QC Supervisor">
-          <div class="team-overlay d-flex flex-column justify-content-center align-items-center">
-            <h5 class="text-white fw-bold mb-1">Andi Pratama</h5>
-            <p class="text-light mb-0">Quality Control</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Anggota 4 -->
-      <div class="col-md-3 col-sm-6">
-        <div class="team-card position-relative overflow-hidden shadow-sm">
-          <img src="assets/images/team4.jpg" class="img-fluid team-img" alt="Marketing">
-          <div class="team-overlay d-flex flex-column justify-content-center align-items-center">
-            <h5 class="text-white fw-bold mb-1">Lestari Dewi</h5>
-            <p class="text-light mb-0">Marketing Executive</p>
-          </div>
-        </div>
+      <div class="zoneContent" style="left:70%; top:74%;">
+        <span class="zoneLabel">Buah-Buahan</span>
+        <span class="zonePorsi">1/</span>
+        <div class="zoneItems" id="iBuah"></div>
       </div>
     </div>
   </div>
-</section>
+  <div id="notification"></div>
+  <button class="ctl" onclick="resetGame()">Main Lagi</button>
+</div>
 
-
-
-
-<!-- Sertifikasi & Legalitas Section -->
-<section id="certifications" class="py-5 bg-white position-relative overflow-hidden">
-  <div class="container" data-aos="zoom-in-up" data-aos-duration="1500">
-    <div class="text-center mb-5">
-      <h2 class="fw-bold text-primary" data-key="certTitle">Sertifikasi & Legalitas</h2>
-      <p class="text-muted" data-key="certSubtitle">
-        Kami berkomitmen untuk memenuhi standar internasional dalam keamanan, mutu, dan legalitas produk ekspor kami.
-      </p>
-    </div>
-
-    <div class="row g-4 justify-content-center">
-      <div class="col-md-3 col-sm-6">
-        <div class="card border-0 shadow-sm text-center p-4 cert-card">
-          <i class="bi bi-shield-check text-success fs-1 mb-3"></i>
-          <h5 class="fw-bold" data-key="cert1Title">HACCP Certified</h5>
-        </div>
-      </div>
-
-      <div class="col-md-3 col-sm-6">
-        <div class="card border-0 shadow-sm text-center p-4 cert-card">
-          <i class="bi bi-patch-check-fill text-primary fs-1 mb-3"></i>
-          <h5 class="fw-bold" data-key="cert2Title">ISO 22000</h5>
-        </div>
-      </div>
-
-      <div class="col-md-3 col-sm-6">
-        <div class="card border-0 shadow-sm text-center p-4 cert-card">
-          <i class="bi bi-building-check text-info fs-1 mb-3"></i>
-          <h5 class="fw-bold" data-key="cert3Title">FDA Approved</h5>
-        </div>
-      </div>
-
-      <div class="col-md-3 col-sm-6">
-        <div class="card border-0 shadow-sm text-center p-4 cert-card">
-          <i class="bi bi-award-fill text-warning fs-1 mb-3"></i>
-          <h5 class="fw-bold" data-key="cert4Title">KKP Registered</h5>
-        </div>
-      </div>
-    </div>
+<div id="winOverlay">
+  <div class="winCard">
+    <div style="font-size:60px">🎉✅🎉</div>
+    <h2>Selamat, Berhasil!</h2>
+    <p>Kamu berhasil mengisi semua bagian piring sesuai pedoman "Isi Piringku". Terus jaga pola makan sehat ya! 💪</p>
+    <button class="ctl" onclick="tutupWin()">Main Lagi</button>
   </div>
-</section>
+</div>
 
+<script>
+// ================= DATA MAKANAN =================
+// Jika tidak ada emoji yang cocok, gunakan img:"namafile.png"
+// (file gambar diletakkan di folder yang sama dengan index.html)
+var foodData = [
+  // ===== MAKANAN POKOK =====
+  { emoji:"🍚", nama:"Nasi Putih",   kat:"pokok" },
+  { emoji:"🍠", nama:"Ubi Jalar",    kat:"pokok" },
+  { emoji:"🌽", nama:"Jagung",       kat:"pokok" },
+  { emoji:"🥔", nama:"Kentang",      kat:"pokok" },
+  { emoji:"🍞", nama:"Roti Tawar",   kat:"pokok" },
 
+  // ===== LAUK-PAUK =====
+  { emoji:"🍗", nama:"Ayam",         kat:"lauk" },
+  { emoji:"🐟", nama:"Ikan",         kat:"lauk" },
+  { emoji:"🍳", nama:"Telur Dadar",  kat:"lauk" },
+  { img:"tempe.png",  nama:"Tempe",        kat:"lauk" },
+  { img:"tahu.png",   nama:"Tahu",         kat:"lauk" },
+  { emoji:"🫘", nama:"Kacang Merah", kat:"lauk" },
 
-  <!-- Footer -->
-  <footer id="footer" class="bg-light py-4">
-    <div class="container text-center">
-      <p class="mb-0" data-key="footerText">&copy; 2025 PT Contoh Perusahaan. All rights reserved.</p>
-    </div>
-  </footer>
+  // ===== SAYURAN =====
+  { emoji:"🥬", nama:"Bayam",        kat:"sayur" },
+  { emoji:"🥕", nama:"Wortel",       kat:"sayur" },
+  { emoji:"🥦", nama:"Brokoli",      kat:"sayur" },
+  { img:"kacang-panjang.png", nama:"Kacang Panjang", kat:"sayur" },
+  { emoji:"🥒", nama:"Timun",        kat:"sayur" },
+  { img:"sawi.png",   nama:"Sawi Hijau",   kat:"sayur" },
 
-    <!-- Floating WhatsApp Button -->
-    <a href="https://wa.me/6281234567890" 
-        class="whatsapp-float" 
-        target="_blank" 
-        aria-label="Chat via WhatsApp">
-        <i class="bi bi-whatsapp"></i>
-    </a>
+  // ===== BUAH-BUAHAN =====
+  { emoji:"🍌", nama:"Pisang",       kat:"buah" },
+  { emoji:"🍉", nama:"Semangka",     kat:"buah" },
+  { img:"pepaya.png", nama:"Pepaya",       kat:"buah" },
+  { emoji:"🍎", nama:"Apel",         kat:"buah" },
+  { img:"mangga.png", nama:"Mangga",       kat:"buah" },
+  { emoji:"🍊", nama:"Jeruk",        kat:"buah" },
 
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <!-- AOS JS -->
-  <script src="https://cdn.jsdelivr.net/npm/aos@3.0.0-beta.6/dist/aos.js"></script>
-  <!-- Custom JS -->
-  <script src="assets/js/script.js"></script>
-  <script src="assets/js/lang.js"></script>
+  // ===== MAKANAN JEBAKAN =====
+  { img:"keripik.png", nama:"Keripik",        kat:"jebakan", alasan:"Tinggi garam dan minyak, pilih kentang rebus!" },
+  { emoji:"🍩", nama:"Donat",           kat:"jebakan", alasan:"Digoreng dan bergula, bukan bagian Isi Piringku." },
+  { img:"gorengan.png", nama:"Gorengan",      kat:"jebakan", alasan:"Tinggi minyak, kurangi makanan gorengan!" },
+  { emoji:"🍔", nama:"Hamburger",       kat:"jebakan", alasan:"Junk food tinggi lemak dan garam." },
+  { emoji:"🌭", nama:"Sosis",           kat:"jebakan", alasan:"D olahan tinggi garam dan pengawet." },
+  { img:"cokelat.png",  nama:"Cokelat Batang", kat:"jebakan", alasan:"Tinggi gula dan lemak." },
+  { emoji:"🍦", nama:"Es Krim",         kat:"jebakan", alasan:"Tinggi gula dan lemak susu." },
+  { emoji:"🥤", nama:"Minuman Manis",   kat:"jebakan", alasan:"Tinggi gula, pilih air putih!" },
+  { emoji:"🍰", nama:"Kue",             kat:"jebakan", alasan:"Makanan manis berlemak." }
+];
+
+// ================= PETA NAMA =================
+var namaKat = {
+  pokok: "makanan pokok",
+  lauk:  "lauk-pauk",
+  sayur: "sayuran",
+  buah:  "buah-buahan"
+};
+
+var namaZona = {
+  pokok: "Zona Makanan Pokok",
+  lauk:  "Zona Lauk-Pauk",
+  sayur: "Zona Sayuran",
+  buah:  "Zona Buah-Buahan"
+};
+
+var idItem = {
+  pokok: "iPokok",
+  lauk:  "iLauk",
+  sayur: "iSayur",
+  buah:  "iBuah"
+};
+
+// ================= STATE =================
+var shuffled = [];
+var dipilih = null;
+var sedangDrag = null;
+
+// ============ CEK MENANG: semua zona minimal 1 ============
+function cekMenang() {
+  for (var k in idItem) {
+    if (document.getElementById(idItem[k]).children.length === 0) {
+      return false;
+    }
+  }
+  return true;
+}
+
+function acak() {
+  shuffled = foodData.slice();
+  for (var i = shuffled.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = shuffled[i];
+    shuffled[i] = shuffled[j];
+    shuffled[j] = t;
+  }
+}
+
+// ================= RENDER NAMPAN =================
+function renderMakanan() {
+  var tray = document.getElementById("foods");
+  tray.innerHTML = "";
+  for (var i = 0; i < shuffled.length; i++) {
+    var f = shuffled[i];
+
+    var d = document.createElement("div");
+    d.className = "food";
+    d.setAttribute("data-idx", String(i));
+    d.setAttribute("draggable", "true");
+
+    // tampilan: gambar file jika ada img, selain itu emoji
+    var tampil = f.img
+      ? "<img class='foodImg' src='" + f.img + "' alt='" + f.nama + "'>"
+      : "<span class='foodEmoji'>" + f.emoji + "</span>";
+
+    d.innerHTML = tampil +
+                  "<span class='foodName'>" + f.nama + "</span>";
+
+    d.addEventListener("dragstart", function(e) {
+      sedangDrag = this;
+      this.classList.add("dragging");
+      e.dataTransfer.setData("text/plain", "food");
+      e.dataTransfer.effectAllowed = "move";
+    });
+
+    d.addEventListener("dragend", function() {
+      this.classList.remove("dragging");
+      sembunyikanHighlight();
+      sedangDrag = null;
+    });
+
+    d.addEventListener("click", function() {
+      klikMakanan(this);
+    });
+
+    tray.appendChild(d);
+  }
+}
+
+// ================= ZONA PIRING (SEKTOR SVG) =================
+function setupZona() {
+  var zones = document.querySelectorAll(".sector");
+  for (var z = 0; z < zones.length; z++) {
+
+    zones[z].addEventListener("dragover", function(e) {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = "move";
+      this.classList.add("highlight");
+    });
+
+    zones[z].addEventListener("dragleave", function() {
+      this.classList.remove("highlight");
+    });
+
+    zones[z].addEventListener("drop", function(e) {
+      e.preventDefault();
+      this.classList.remove("highlight");
+      if (sedangDrag) {
+        proses(this, sedangDrag);
+        sedangDrag.classList.remove("dragging");
+        sedangDrag = null;
+      }
+    });
+
+    zones[z].addEventListener("click", function() {
+      klikZona(this);
+    });
+  }
+}
+
+function sembunyikanHighlight() {
+  var zones = document.querySelectorAll(".sector");
+  for (var z = 0; z < zones.length; z++) {
+    zones[z].classList.remove("highlight");
+  }
+}
+
+// ================= MODE KLIK (HP) =================
+function klikMakanan(el) {
+  if (el.classList.contains("placed")) return;
+  if (dipilih === el) {
+    el.classList.remove("selected");
+    dipilih = null;
+    return;
+  }
+  if (dipilih) dipilih.classList.remove("selected");
+  dipilih = el;
+  el.classList.add("selected");
+}
+
+function klikZona(zone) {
+  if (!dipilih) return;
+  proses(zone, dipilih);
+  dipilih.classList.remove("selected");
+  dipilih = null;
+}
+
+// ================= LOGIKA UTAMA =================
+function proses(zone, el) {
+  var idx = parseInt(el.getAttribute("data-idx"), 10);
+  var f = shuffled[idx];
+  var target = zone.getAttribute("data-kat");
+  var notif = document.getElementById("notification");
+
+  if (f.kat === target) {
+    el.classList.add("placed");
+
+    if (f.img) {
+      var gambar = document.createElement("img");
+      gambar.src = f.img;
+      gambar.alt = f.nama;
+      gambar.className = "popIn";
+      document.getElementById(idItem[target]).appendChild(gambar);
+    } else {
+      var span = document.createElement("span");
+      span.textContent = f.emoji;
+      span.className = "popIn";
+      document.getElementById(idItem[target]).appendChild(span);
+    }
+
+    notif.textContent = "✅ Benar! " + f.nama + " masuk ke " + namaZona[target] + ".";
+    notif.className = "notif-success";
+
+    if (cekMenang()) {
+      setTimeout(function() {
+        document.getElementById("winOverlay").style.display = "flex";
+      }, 500);
+    }
+
+  } else {
+    zone.classList.add("wrong");
+    setTimeout(function() { zone.classList.remove("wrong"); }, 450);
+
+    var pesan;
+    if (f.kat === "jebakan") {
+      pesan = "❌ " + f.nama + ": " + f.alasan;
+    } else {
+      pesan = "❌ " + f.nama + " adalah " + namaKat[f.kat] +
+              ", bukan untuk " + namaZona[target] + ".";
+    }
+    notif.textContent = pesan;
+    notif.className = "notif-error";
+  }
+}
+
+// ================= RESET =================
+function resetGame() {
+  dipilih = null;
+  sedangDrag = null;
+  for (var k in idItem) {
+    document.getElementById(idItem[k]).innerHTML = "";
+  }
+  acak();
+  renderMakanan();
+  var notif = document.getElementById("notification");
+  notif.textContent = "";
+  notif.className = "";
+}
+
+function tutupWin() {
+  document.getElementById("winOverlay").style.display = "none";
+  resetGame();
+}
+
+document.getElementById("btnStart").addEventListener("click", function() {
+  document.getElementById("startScreen").style.display = "none";
+  document.getElementById("gameScreen").style.display = "flex";
+  setupZona();
+  resetGame();
+});
+</script>
+
 </body>
 </html>

@@ -64,6 +64,82 @@ body { font-family:'Segoe UI',sans-serif; background:linear-gradient(135deg,#a8e
 #btnStart:hover { background:#1b4332; transform:scale(1.05); }
 #btnStart:active { transform:scale(.97); }
 
+/* ===== EFEK KEMENANGAN MERIAH ===== */
+
+/* kartu kemenangan lebih meriah */
+#winOverlay { backdrop-filter: blur(4px); }
+#winOverlay.aktif { display:flex !important; }
+.winCard {
+  animation: bounceIn .7s cubic-bezier(.34,1.56,.64,1);
+  border: 3px solid #ffd700;
+  box-shadow: 0 0 40px rgba(255,215,0,.6), 0 20px 60px rgba(0,0,0,.3);
+}
+@keyframes bounceIn {
+  0%   { transform: scale(0) rotate(-15deg); opacity:0; }
+  60%  { transform: scale(1.15) rotate(5deg); opacity:1; }
+  100% { transform: scale(1) rotate(0deg); opacity:1; }
+}
+.winCard h2 {
+  animation: warnaPelangi 1.5s linear infinite;
+  font-size: clamp(24px, 3.5vw, 36px);
+}
+@keyframes warnaPelangi {
+  0%   { color:#e63946; }
+  20%  { color:#f77f00; }
+  40%  { color:#2a9d8f; }
+  60%  { color:#1d6fa5; }
+  80%  { color:#9b5de5; }
+  100% { color:#e63946; }
+}
+.emojiMenang {
+  display:inline-block;
+  font-size: clamp(48px, 7vw, 80px);
+  animation: goyangEmoji .6s ease-in-out infinite alternate;
+}
+.emojiMenang span { display:inline-block; }
+.emojiMenang span:nth-child(1) { animation: loncat .7s ease-in-out infinite; }
+.emojiMenang span:nth-child(2) { animation: loncat .7s ease-in-out .15s infinite; }
+.emojiMenang span:nth-child(3) { animation: loncat .7s ease-in-out .3s infinite; }
+.emojiMenang span:nth-child(4) { animation: loncat .7s ease-in-out .45s infinite; }
+.emojiMenang span:nth-child(5) { animation: loncat .7s ease-in-out .6s infinite; }
+@keyframes loncat {
+  0%,100% { transform: translateY(0) scale(1); }
+  50%     { transform: translateY(-18px) scale(1.2); }
+}
+
+/* konfeti */
+#confettiWrap {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 101;
+  overflow: hidden;
+}
+.konfeti {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  top: -20px;
+  animation: jatuh linear forwards;
+}
+@keyframes jatuh {
+  to { transform: translateY(110vh) rotate(720deg); }
+}
+
+/* bintang berkelap-kelip */
+.bintangBerkelip {
+  position: fixed;
+  font-size: 30px;
+  z-index: 101;
+  pointer-events: none;
+  animation: kelip 1s ease-in-out infinite;
+}
+@keyframes kelip {
+  0%,100% { transform: scale(.5); opacity:.3; }
+  50%     { transform: scale(1.4); opacity:1; }
+}
+
+
 /* HP: susun vertikal — gambar di atas, kotak di bawah */
 @media (max-width:768px) {
   #startScreen { flex-direction:column; }
@@ -76,38 +152,101 @@ body { font-family:'Segoe UI',sans-serif; background:linear-gradient(135deg,#a8e
 #gameScreen h1 { color:#2d6a4f; font-size:clamp(20px, 3vw, 34px); margin-bottom:4px; }
 #gameArea { display:flex; gap:clamp(16px, 3vw, 40px); justify-content:center; align-items:center; flex-wrap:wrap; margin-top:10px; width:100%; }
 
-/* ===== PETUNJUK PERMAINAN (di atas piring) ===== */
-#petunjukWrap {
-  width:min(92vw, 60vh, 640px);
-  margin:0 auto 12px;
-}
+/* ===== TOMBOL PETUNJUK ===== */
 #btnPetunjuk {
-  width:100%;
   background:#fff;
   color:#2d6a4f;
   border:2px solid #2d6a4f;
-  padding:10px 16px;
+  padding:10px 22px;
   font-size:clamp(13px, 1.4vw, 17px);
   font-weight:bold;
   border-radius:14px;
   cursor:pointer;
   transition:background .2s;
+  margin-bottom:12px;
 }
 #btnPetunjuk:hover { background:#e8f5ee; }
-#isiPetunjuk {
-  display:none;
-  background:#fffdf5;
-  border:2px solid #e0a800;
-  border-radius:14px;
-  padding:12px 16px;
-  margin-top:8px;
-  font-size:clamp(11px, 1.2vw, 15px);
-  color:#4a3b20;
-  line-height:1.7;
+
+/* ===== POP UP PETUNJUK (MODAL) ===== */
+#petunjukOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 150;
+  padding: 16px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .3s ease, visibility .3s ease;
 }
-#isiPetunjuk ul { padding-left:20px; }
-#isiPetunjuk li { margin-bottom:4px; }
-#isiPetunjuk.buka { display:block; }
+#petunjukOverlay.buka {
+  opacity: 1;
+  visibility: visible;
+}
+#petunjukCard {
+  background: #fffdf5;
+  border: 3px solid #e0a800;
+  border-radius: 22px;
+  padding: 24px 26px;
+  max-width: 520px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0,0,0,.3);
+  transform: scale(.7) translateY(30px);
+  opacity: 0;
+  transition: transform .35s cubic-bezier(.34,1.56,.64,1), opacity .3s ease;
+}
+#petunjukOverlay.buka #petunjukCard {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+}
+#petunjukCard h3 {
+  color:#b07d00;
+  font-size:clamp(16px, 2vw, 22px);
+  margin-bottom:12px;
+  text-align:center;
+}
+#petunjukCard ul {
+  padding-left: 20px;
+  font-size: clamp(12px, 1.3vw, 15px);
+  color:#4a3b20;
+  line-height:1.8;
+}
+#petunjukCard li { margin-bottom:8px; }
+#btnTutupPetunjuk {
+  display:block;
+  margin:18px auto 0;
+  background:#2d6a4f;
+  color:#fff;
+  border:none;
+  padding:10px 34px;
+  font-size:15px;
+  font-weight:bold;
+  border-radius:25px;
+  cursor:pointer;
+  transition:background .2s, transform .2s;
+}
+#btnTutupPetunjuk:hover { background:#1b4332; transform:scale(1.05); }
+/* tombol X di pojok kanan atas pop up */
+#btnXPetunjuk {
+  position:absolute;
+  top:10px; right:12px;
+  background:#fee2e2;
+  color:#991b1b;
+  border:none;
+  width:34px; height:34px;
+  border-radius:50%;
+  font-size:18px;
+  font-weight:bold;
+  cursor:pointer;
+  line-height:1;
+  transition:background .2s, transform .2s;
+}
+#btnXPetunjuk:hover { background:#fecaca; transform:rotate(90deg); }
 
 /* gambar makanan di nampan & di piring */
 .foodImg    { width:clamp(30px, 4vw, 48px); height:clamp(30px, 4vw, 48px); object-fit:contain; display:block; margin:0 auto; }
@@ -130,6 +269,18 @@ body { font-family:'Segoe UI',sans-serif; background:linear-gradient(135deg,#a8e
   background:radial-gradient(circle at center,#fff 55%,#ececec 78%,#dcdcdc 88%,#fff 92%,#e8e8e8 100%);
   box-shadow:0 15px 35px rgba(0,0,0,.22), inset 0 0 0 22px #fafafa; }
 
+/* ===== SENDOK & GARPU di samping kanan piring ===== */
+#sendokGarpu {
+  position:absolute;
+  right: -8%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: clamp(36px, 6vw, 90px);
+  z-index: 8;
+  pointer-events: none;
+  filter: drop-shadow(0 6px 12px rgba(0,0,0,.25));
+}
+
 /* ===== SEKTOR TAK TERLIHAT (area drop) ===== */
 #plateSvg { position:absolute; top:3.5%; left:3.5%; width:93%; height:93%; z-index:5; }
 .sector { fill:transparent; cursor:pointer; transition:fill .15s; }
@@ -143,15 +294,18 @@ body { font-family:'Segoe UI',sans-serif; background:linear-gradient(135deg,#a8e
 /* label & emoji di tengah tiap bagian */
 .zoneContent { position:absolute; display:flex; flex-direction:column; align-items:center;
                transform:translate(-50%,-50%); pointer-events:none; z-index:7; text-align:center; }
-.zoneLabel { font-size:clamp(10px, 1.4vw, 17px); font-weight:bold; color:#666; }
-.zonePorsi { font-size:clamp(8px, 1vw, 13px); color:#aaa; }
+.zoneLabel { font-size:clamp(10px, 1.4vw, 20px); font-weight:bold; color:#666; }
+/* .zonePorsi { font-size:clamp(8px, 1vw, 13px); color:#aaa; } */
+.zonePorsi { font-size:clamp(12px, 1.8vw, 22px); color:#666; font-weight:bold; }
 .zoneItems { font-size:clamp(24px, 3.4vw, 44px); margin-top:6px; max-width:90%; }
 
 #notification { margin-top:15px; min-height:50px; max-width:900px; width:100%; padding:12px; border-radius:12px; text-align:center; display:none; font-size:clamp(12px, 1.4vw, 16px); }
 .notif-error { background:#fee2e2; color:#991b1b; display:block; }
 .notif-success { background:#dcfce7; color:#166534; display:block; }
 
-button.ctl { background:#2d6a4f; color:#fff; border:none; padding:10px 26px; border-radius:25px; cursor:pointer; font-weight:bold; margin-top:12px; }
+/* button.ctl { background:#2d6a4f; color:#fff; border:none; padding:10px 26px; border-radius:25px; cursor:pointer; font-weight:bold; margin-top:12px; } */
+button.ctl { background:#2d6a4f; color:#fff; border:none; padding:16px 44px; border-radius:25px; cursor:pointer; font-weight:bold; margin-top:12px; font-size:clamp(16px, 2vw, 22px); transition:transform .2s, background .2s; }
+button.ctl:hover { background:#1b4332; transform:scale(1.05); }
 
 #winOverlay { position:fixed; inset:0; background:rgba(0,0,0,.6); display:none; align-items:center; justify-content:center; z-index:100; padding:16px; }
 .winCard { background:#fff; padding:clamp(24px, 4vw, 40px); border-radius:22px; text-align:center; max-width:420px; animation:popUp .4s ease; }
@@ -161,6 +315,89 @@ button.ctl { background:#2d6a4f; color:#fff; border:none; padding:10px 26px; bor
 
 .food.dragging { opacity:.4; transform:scale(.9); cursor:grabbing; }
 .zoneItems .popIn { display:inline-block; animation:popIn .3s ease; }
+
+/* ===== IMAGE1: DEKORASI STATIS POJOK KANAN BAWAH ===== */
+#decoKanan {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: clamp(110px, 15vw, 200px);
+  z-index: 90;
+  pointer-events: none;      /* klik tembus, tidak mengganggu game */
+  animation: goyangKarakter 3s ease-in-out infinite;
+  filter: drop-shadow(0 6px 12px rgba(0,0,0,.25));
+}
+
+/* ===== IMAGE3: DEKORASI STATIS POJOK KANAN ATAS (UKURAN BESAR) ===== */
+#decoKananAtas {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: clamp(200px, 28vw, 380px);
+  z-index: 90;
+  pointer-events: none;      /* klik tembus, tidak mengganggu game */
+  /* animation: goyangKarakter 3s ease-in-out infinite; */
+  filter: drop-shadow(0 6px 12px rgba(0,0,0,.25));
+}
+
+/* ===== IMAGE2 (DAIA): KARAKTER INTERAKTIF POJOK KIRI BAWAH ===== */
+#daia {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: clamp(110px, 15vw, 200px);
+  z-index: 90;
+  cursor: pointer;
+  animation: goyangKarakter 3s ease-in-out infinite;
+  transition: transform .2s;
+  filter: drop-shadow(0 6px 12px rgba(0,0,0,.25));
+}
+#daia:hover { transform: scale(1.08); }
+
+@keyframes goyangKarakter {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-10px); }
+}
+
+/* balon ucapan Daia (di kanan Daia) */
+#daiaBubble {
+  position: fixed;
+  bottom: calc(clamp(110px, 15vw, 200px) * 0.75);
+  left: clamp(100px, 14vw, 190px);
+  max-width: min(70vw, 280px);
+  background: #fff;
+  border: 2px solid #2d6a4f;
+  border-radius: 16px;
+  padding: 10px 14px;
+  font-size: clamp(11px, 1.2vw, 14px);
+  color: #2d6a4f;
+  line-height: 1.6;
+  z-index: 90;
+  display: none;
+  box-shadow: 0 8px 20px rgba(0,0,0,.2);
+}
+#daiaBubble.buka { display: block; animation: popUp .3s ease; }
+#daiaBubble::after {
+  content: "";
+  position: absolute;
+  left: -10px;
+  bottom: 18px;
+  border-width: 10px 12px 10px 0;
+  border-style: solid;
+  border-color: transparent #fff transparent transparent;
+}
+
+@media (max-width:768px) {
+  #decoKanan, #daia { width: clamp(80px, 22vw, 110px); }
+  #decoKananAtas    { width: clamp(120px, 32vw, 180px); }
+  #daiaBubble {
+    left: auto;
+    right: 12px;
+    bottom: calc(clamp(80px, 22vw, 110px) * 0.9);
+  }
+  /* di HP, sendok-garpu dikecilkan & tidak menabrak piring */
+  #sendokGarpu { width: clamp(24px, 8vw, 40px); right: -6%; }
+}
 </style>
 </head>
 <body>
@@ -192,28 +429,15 @@ button.ctl { background:#2d6a4f; color:#fff; border:none; padding:10px 26px; bor
 <!-- ================= HALAMAN 2 ================= -->
 <div id="gameScreen">
   <h1>🍽️ Isi Piringku!</h1>
+  <button id="btnPetunjuk" onclick="bukaPetunjuk()">📖 Petunjuk Permainan</button>
   <div id="gameArea">
     <div id="foodTray">
       <h3>🧺 Nampan Makanan</h3>
       <div id="foods"></div>
     </div>
 
-    <!-- kolom kanan: petunjuk + piring -->
+    <!-- kolom kanan: piring -->
     <div>
-      <!-- ===== PETUNJUK PERMAINAN (di atas piring) ===== -->
-      <div id="petunjukWrap">
-        <button id="btnPetunjuk" onclick="togglePetunjuk()">📖 Petunjuk Permainan (klik untuk buka/tutup)</button>
-        <div id="isiPetunjuk">
-          <b>Cara bermain:</b>
-          <ul>
-            <li>📅 Piring dibagi 4 bagian: <b>Makanan Pokok 1/3</b>, <b>Sayuran 1/3</b>, <b>Lauk-Pauk 1/6</b>, dan <b>Buah-Buahan 1/6</b>.</li>
-            <li>🖱️ <b>Di laptop</b>: geser (drag &amp; drop) makanan dari nampan ke bagian piring yang tepat.</li>
-            <li>👆 <b>Di HP</b>: ketuk makanan satu kali (akan bertanda merah), lalu ketuk bagian piring tujuannya.</li>
-            <li>✅ Jika benar, makanan muncul di piring. Isi <b>semua 4 bagian</b> untuk menang!</li>
-            <li>⚠️ Hati-hati, ada <b>makanan jebakan</b> yang tidak termasuk Isi Piringku. Perhatikan penjelasan jika salah.</li>
-          </ul>
-        </div>
-      </div>
 
       <div id="plateWrap">
         <div id="plate"></div>
@@ -240,6 +464,10 @@ button.ctl { background:#2d6a4f; color:#fff; border:none; padding:10px 26px; bor
           <line class="dotline" x1="50" y1="50" x2="12.78" y2="71.5"/>
           <line class="dotline" x1="50" y1="50" x2="87.22" y2="71.5"/>
         </svg>
+
+        <!-- ===== SENDOK & GARPU di samping kanan piring ===== -->
+        <img id="sendokGarpu" src="sendok-garpu.png" alt="Sendok dan Garpu"
+             onerror="this.style.display='none';">
 
         <!-- Label & isi di tengah tiap bagian -->
         <div class="zoneContent" style="left:31%; top:32%;">
@@ -269,14 +497,48 @@ button.ctl { background:#2d6a4f; color:#fff; border:none; padding:10px 26px; bor
   <button class="ctl" onclick="resetGame()">Main Lagi</button>
 </div>
 
+<!-- ================= POP UP PETUNJUK ================= -->
+<div id="petunjukOverlay" onclick="tutupPetunjukLuar(event)">
+  <div id="petunjukCard">
+    <button id="btnXPetunjuk" onclick="tutupPetunjuk()">✕</button>
+    <h3>📖 Petunjuk Permainan</h3>
+    <ul>
+      <li>📅 Piring dibagi 4 bagian: <b>Makanan Pokok 1/3</b>, <b>Sayuran 1/3</b>, <b>Lauk-Pauk 1/6</b>, dan <b>Buah-Buahan 1/6</b>.</li>
+      <li>🖱️ <b>Di laptop</b>: geser (drag &amp; drop) makanan dari nampan ke bagian piring yang tepat.</li>
+      <li>👆 <b>Di HP</b>: ketuk makanan satu kali (akan bertanda merah), lalu ketuk bagian piring tujuannya.</li>
+      <li>✅ Jika benar, makanan muncul di piring. Isi <b>semua 4 bagian</b> untuk menang!</li>
+      <li>⚠️ Hati-hati, ada <b>makanan jebakan</b> yang tidak termasuk Isi Piringku. Perhatikan penjelasan jika salah.</li>
+    </ul>
+    <button id="btnTutupPetunjuk" onclick="tutupPetunjuk()">Mengerti! 👍</button>
+  </div>
+</div>
+
+<!-- ===== IMAGE3: dekorasi statis pojok kanan atas (BESAR) ===== -->
+<img id="decoKananAtas" src="image3.png" alt="Karakter"
+     onerror="this.style.display='none';">
+
+<!-- ===== IMAGE1: dekorasi statis pojok kanan bawah ===== -->
+<img id="decoKanan" src="image1.png" alt="Karakter"
+     onerror="this.style.display='none';">
+
+<!-- ===== IMAGE2 (Daia): karakter interaktif pojok kiri bawah ===== -->
+<div id="daiaBubble">Halo! Aku Daia 👋<br>Ketuk aku lagi kalau butuh bantuan ya!</div>
+<img id="daia" src="image2.png" alt="Daia" onclick="klikDaia()"
+     onerror="this.style.display='none'; document.getElementById('daiaBubble').style.display='none';">
+
 <div id="winOverlay">
   <div class="winCard">
-    <div style="font-size:60px">🎉✅🎉</div>
+    <div class="emojiMenang">
+      <span>🎉</span><span>🏆</span><span>✅</span><span>🎊</span><span>⭐</span>
+    </div>
     <h2>Selamat, Berhasil!</h2>
     <p>Kamu berhasil mengisi semua bagian piring sesuai pedoman "Isi Piringku". Terus jaga pola makan sehat ya! 💪</p>
     <button class="ctl" onclick="tutupWin()">Main Lagi</button>
   </div>
 </div>
+<!-- wadah konfeti -->
+<div id="confetiWrap"></div>
+
 
 <script>
 // ================= DATA MAKANAN =================
@@ -481,6 +743,7 @@ function proses(zone, el) {
 
   if (f.kat === target) {
     el.classList.add("placed");
+     mainkanSuaraBenar(); 
 
     if (f.img) {
       var gambar = document.createElement("img");
@@ -498,11 +761,16 @@ function proses(zone, el) {
     notif.textContent = "✅ Benar! " + f.nama + " masuk ke " + namaZona[target] + ".";
     notif.className = "notif-success";
 
-    if (cekMenang()) {
+        if (cekMenang()) {
       setTimeout(function() {
-        document.getElementById("winOverlay").style.display = "flex";
+        mainkanSuaraMenang();     // musik kemenangan 🎵
+        ledakanKonfeti();         // konfeti + bintang 🎊
+        var ov = document.getElementById("winOverlay");
+        ov.style.display = "flex";
+        ov.classList.add("aktif");
       }, 500);
     }
+
 
   } else {
     zone.classList.add("wrong");
@@ -520,10 +788,131 @@ function proses(zone, el) {
   }
 }
 
-// ================= PETUNJUK (buka/tutup) =================
-function togglePetunjuk() {
-  document.getElementById("isiPetunjuk").classList.toggle("buka");
+// ================= PETUNJUK (POP UP MODAL) =================
+function bukaPetunjuk() {
+  document.getElementById("petunjukOverlay").classList.add("buka");
 }
+
+function tutupPetunjuk() {
+  document.getElementById("petunjukOverlay").classList.remove("buka");
+}
+
+// klik area gelap di luar kartu juga menutup pop
+// klik area gelap di luar kartu juga menutup pop up
+function tutupPetunjukLuar(event) {
+  if (event.target.id === "petunjukOverlay") {
+    tutupPetunjuk();
+  }
+}
+
+// // ================= DAIA (karakter interaktif di kiri) =================
+// var ucapanDaia = [
+//   "Halo! Aku Daia 👋<br>Ketuk makanan lalu taruh di piring ya!",
+//   "Ingat! 🍚 Pokok 1/3, 🥬 Sayur 1/3,<br>🍗 Lauk 1/6, 🍎 Buah 1/6!",
+//   "Awas ada makanan jebakan ⚠️<br>Jangan sampai tertukar!",
+//   "Semangat! Kamu pasti bisa 💪",
+//   "Makan sehat, tubuh kuat! 🥗✨"
+// ];
+// var idxDaia = 0;
+
+function klikDaia() {
+  var bubble = document.getElementById("daiaBubble");
+  bubble.innerHTML = ucapanDaia[idxDaia];
+  bubble.classList.add("buka");
+  idxDaia = (idxDaia + 1) % ucapanDaia.length;
+
+  // balon otomatis tertutup setelah 4 detik
+  clearTimeout(window.daiaTimer);
+  window.daiaTimer = setTimeout(function() {
+    bubble.classList.remove("buka");
+  }, 4000);
+}
+
+// ================= EFEK SUARA KEMENANGAN =================
+function mainkanSuaraMenang() {
+  try {
+    var ctx = new (window.AudioContext || window.webkitAudioContext)();
+    var waktu = ctx.currentTime;
+
+    // melodi gembira (nada C-E-G-C tinggi)
+    var nada = [
+      { f:523.25, t:0.00 },  // C5
+      { f:659.25, t:0.15 },  // E5
+      { f:783.99, t:0.30 },  // G5
+      { f:1046.50,t:0.45 },  // C6
+      { f:783.99, t:0.65 },  // G5
+      { f:1046.50,t:0.80 }   // C6 (panjang, kemenangan!)
+    ];
+    var durasi = [0.12, 0.12, 0.12, 0.18, 0.12, 0.55];
+
+    for (var i = 0; i < nada.length; i++) {
+      var osc = ctx.createOscillator();
+      var gain = ctx.createGain();
+      osc.type = "triangle";
+      osc.frequency.value = nada[i].f;
+      var mulai = waktu + nada[i].t;
+      gain.gain.setValueAtTime(0.0001, mulai);
+      gain.gain.exponentialRampToValueAtTime(0.3, mulai + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, mulai + durasi[i]);
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.start(mulai); osc.stop(mulai + durasi[i] + 0.05);
+    }
+  } catch(e) { /* browser tidak mendukung, abaikan */ }
+}
+
+// suara "bling" saat jawaban benar
+function mainkanSuaraBenar() {
+  try {
+    var ctx = new (window.AudioContext || window.webkitAudioContext)();
+    var waktu = ctx.currentTime;
+    var osc = ctx.createOscillator();
+    var gain = ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(880, waktu);
+    osc.frequency.setValueAtTime(1318, waktu + 0.08);
+    gain.gain.setValueAtTime(0.2, waktu);
+    gain.gain.exponentialRampToValueAtTime(0.0001, waktu + 0.25);
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.start(waktu); osc.stop(waktu + 0.3);
+  } catch(e) {}
+}
+
+// ================= KONFETI & BINTANG =================
+function ledakanKonfeti() {
+  var wrap = document.getElementById("confetiWrap");
+  var warna = ["#e63946","#f77f00","#ffd700","#2a9d8f","#1d6fa5","#9b5de5","#06d6a0","#ff6b9d"];
+
+  for (var i = 0; i < 80; i++) {
+    var k = document.createElement("div");
+    k.className = "konfeti";
+    k.style.left = Math.random() * 100 + "vw";
+    k.style.backgroundColor = warna[Math.floor(Math.random() * warna.length)];
+    k.style.animationDuration = (2 + Math.random() * 2.5) + "s";
+    k.style.animationDelay = Math.random() * 1.5 + "s";
+    k.style.borderRadius = Math.random() > 0.5 ? "50%" : "2px";
+    k.style.width  = (6 + Math.random() * 10) + "px";
+    k.style.height = (6 + Math.random() * 10) + "px";
+    wrap.appendChild(k);
+  }
+
+  // bintang berkelap-kelip di beberapa titik
+  var posisi = [[15,20],[80,15],[25,70],[70,75],[50,30],[10,50],[90,45]];
+  for (var j = 0; j < posisi.length; j++) {
+    setTimeout(function(px, py) {
+      var b = document.createElement("div");
+      b.className = "bintangBerkelip";
+      b.textContent = ["⭐","✨","🌟"][Math.floor(Math.random()*3)];
+      b.style.left = px + "vw";
+      b.style.top  = py + "vh";
+      document.body.appendChild(b);
+      setTimeout(function(){ b.remove(); }, 4000);
+    }, j * 300, posisi[j][0], posisi[j][1]);
+  }
+
+  // bersihkan konfeti setelah 6 detik
+  setTimeout(function(){ wrap.innerHTML = ""; }, 6000);
+}
+
 
 // ================= RESET =================
 function resetGame() {
@@ -540,17 +929,26 @@ function resetGame() {
 }
 
 function tutupWin() {
-  document.getElementById("winOverlay").style.display = "none";
+  var ov = document.getElementById("winOverlay");
+  ov.style.display = "none";
+  ov.classList.remove("aktif");
+  document.getElementById("confetiWrap").innerHTML = "";
+  var bintang = document.querySelectorAll(".bintangBerkelip");
+  for (var i = 0; i < bintang.length; i++) bintang[i].remove();
   resetGame();
 }
+
 
 document.getElementById("btnStart").addEventListener("click", function() {
   document.getElementById("startScreen").style.display = "none";
   document.getElementById("gameScreen").style.display = "flex";
   setupZona();
   resetGame();
+  // sapaan awal dari Daia saat masuk halaman 2
+  setTimeout(klikDaia, 600);
 });
 </script>
 
 </body>
 </html>
+

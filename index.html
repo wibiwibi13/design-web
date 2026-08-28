@@ -2,71 +2,136 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Isi Piringku</title>
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
-body { font-family:'Segoe UI',sans-serif; background:linear-gradient(135deg,#a8e6cf,#dcedc1); min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:20px; }
+body { font-family:'Segoe UI',sans-serif; background:linear-gradient(135deg,#a8e6cf,#dcedc1); min-height:100vh; }
 
+/* ================= HALAMAN 1 (START) ================= */
 #startScreen {
   position: fixed;
   inset: 0;
-  background: linear-gradient(160deg,#74c69d,#b7e4c7);
+  display: flex;
+  z-index: 200;
+}
+
+/* sisi kiri: gambar FULL sebagai background */
+.startLeft {
+  flex: 1 1 50%;
+  background: url('bg-image1.png') center no-repeat;
+  background-size: cover;         /* gambar memenuhi seluruh sisi kiri */
+  background-color: #74c69d;      /* warna cadangan saat gambar loading */
+  min-width: 0;
+}
+
+/* sisi kanan: kotak keterangan */
+.startRight {
+  flex: 1 1 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 200;
-  padding: 20px;
+  padding: clamp(16px, 3vw, 40px);
+  background: linear-gradient(160deg,#74c69d,#b7e4c7);
 }
 .startCard {
   background: #fff;
-  padding: 60px 70px;
+  padding: clamp(24px, 4vw, 60px);
   border-radius: 30px;
   text-align: center;
   width: 100%;
-  max-width: 900px;
-  min-height: 90vh;
+  max-width: 560px;
+  max-height: 92vh;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
   box-shadow: 0 20px 60px rgba(0,0,0,.25);
 }
 
-.startCard h1 { color:#2d6a4f; margin:15px 0; font-size:56px; }
-.startCard p  { color:#555; font-size:22px; line-height:1.9; margin-bottom:35px; }
+.startCard h1 { color:#2d6a4f; margin:10px 0; font-size:clamp(28px, 4.5vw, 56px); }
+.startCard .emojiBesar { font-size:clamp(60px, 9vw, 110px); line-height:1.2; }
+.startCard p  { color:#555; font-size:clamp(13px, 1.6vw, 22px); line-height:1.8; margin-bottom:clamp(16px, 2.5vw, 35px); }
 
 #btnStart {
   background:#2d6a4f; color:#fff; border:none;
-  padding:20px 70px;
-  font-size:26px; font-weight:bold;
+  padding:clamp(12px, 1.8vw, 20px) clamp(30px, 5vw, 70px);
+  font-size:clamp(16px, 2.2vw, 26px);
+  font-weight:bold;
   border-radius:50px; cursor:pointer;
   transition:transform .2s, background .2s;
 }
 #btnStart:hover { background:#1b4332; transform:scale(1.05); }
+#btnStart:active { transform:scale(.97); }
 
-#gameScreen { display:none; width:100%; max-width:1400px; flex-direction:column; align-items:center; }
-#gameArea { display:flex; gap:40px; justify-content:center; align-items:center; flex-wrap:wrap; margin-top:10px; }
+/* HP: susun vertikal — gambar di atas, kotak di bawah */
+@media (max-width:768px) {
+  #startScreen { flex-direction:column; }
+  .startLeft   { flex:0 0 32vh; }
+  .startRight  { flex:1 1 auto; }
+}
+
+/* ================= HALAMAN 2 (GAME) ================= */
+#gameScreen { display:none; width:100%; max-width:1400px; flex-direction:column; align-items:center; padding:16px; margin:0 auto; }
+#gameScreen h1 { color:#2d6a4f; font-size:clamp(20px, 3vw, 34px); margin-bottom:4px; }
+#gameArea { display:flex; gap:clamp(16px, 3vw, 40px); justify-content:center; align-items:center; flex-wrap:wrap; margin-top:10px; width:100%; }
+
+/* ===== PETUNJUK PERMAINAN (di atas piring) ===== */
+#petunjukWrap {
+  width:min(92vw, 60vh, 640px);
+  margin:0 auto 12px;
+}
+#btnPetunjuk {
+  width:100%;
+  background:#fff;
+  color:#2d6a4f;
+  border:2px solid #2d6a4f;
+  padding:10px 16px;
+  font-size:clamp(13px, 1.4vw, 17px);
+  font-weight:bold;
+  border-radius:14px;
+  cursor:pointer;
+  transition:background .2s;
+}
+#btnPetunjuk:hover { background:#e8f5ee; }
+#isiPetunjuk {
+  display:none;
+  background:#fffdf5;
+  border:2px solid #e0a800;
+  border-radius:14px;
+  padding:12px 16px;
+  margin-top:8px;
+  font-size:clamp(11px, 1.2vw, 15px);
+  color:#4a3b20;
+  line-height:1.7;
+}
+#isiPetunjuk ul { padding-left:20px; }
+#isiPetunjuk li { margin-bottom:4px; }
+#isiPetunjuk.buka { display:block; }
 
 /* gambar makanan di nampan & di piring */
-.foodImg    { width:48px; height:48px; object-fit:contain; display:block; margin:0 auto; }
-.zoneItems img { width:52px; height:52px; object-fit:contain; vertical-align:middle; margin:2px; }
+.foodImg    { width:clamp(30px, 4vw, 48px); height:clamp(30px, 4vw, 48px); object-fit:contain; display:block; margin:0 auto; }
+.zoneItems img { width:clamp(28px, 3.8vw, 52px); height:clamp(28px, 3.8vw, 52px); object-fit:contain; vertical-align:middle; margin:2px; }
 
-#foodTray { width:640px; background:#fffdf5; border-radius:20px; padding:15px; border:3px solid #e8ddc0; box-shadow:0 8px 20px rgba(0,0,0,.12); }
-#foodTray h3 { text-align:center; color:#7f5539; margin-bottom:10px; }
-#foods { display:grid; grid-template-columns:repeat(6,1fr); gap:10px; }
-.food { text-align:center; padding:10px 4px; border-radius:14px; background:#fff; cursor:grab; user-select:none; box-shadow:0 3px 6px rgba(0,0,0,.08); }
+#foodTray { width:min(92vw, 640px); background:#fffdf5; border-radius:20px; padding:12px; border:3px solid #e8ddc0; box-shadow:0 8px 20px rgba(0,0,0,.12); }
+#foodTray h3 { text-align:center; color:#7f5539; margin-bottom:10px; font-size:clamp(14px, 1.6vw, 19px); }
+#foods { display:grid; grid-template-columns:repeat(4, 1fr); gap:8px; }
+@media (min-width:576px)  { #foods { grid-template-columns:repeat(6, 1fr); } }
+.food { text-align:center; padding:8px 4px; border-radius:14px; background:#fff; cursor:grab; user-select:none; box-shadow:0 3px 6px rgba(0,0,0,.08); }
 .food:hover { transform:scale(1.1); }
 .food.selected { outline:4px solid #d62828; background:#ffe5e5; }
 .food.placed { visibility:hidden; }
-.foodName { font-size:12px; display:block; color:#555; margin-top:2px; }
-.foodEmoji { font-size:40px; }
+.foodName { font-size:clamp(9px, 1vw, 12px); display:block; color:#555; margin-top:2px; }
+.foodEmoji { font-size:clamp(26px, 3.6vw, 40px); }
 
-#plateWrap { width:640px; height:640px; position:relative; }
-#plate { width:600px; height:600px; border-radius:50%; position:absolute; top:10px; left:10px;
+/* piring: ukuran menyesuaikan layar */
+#plateWrap { width:min(92vw, 60vh, 640px); aspect-ratio:1/1; position:relative; }
+#plate { width:93%; height:93%; border-radius:50%; position:absolute; top:3.5%; left:3.5%;
   background:radial-gradient(circle at center,#fff 55%,#ececec 78%,#dcdcdc 88%,#fff 92%,#e8e8e8 100%);
   box-shadow:0 15px 35px rgba(0,0,0,.22), inset 0 0 0 22px #fafafa; }
 
 /* ===== SEKTOR TAK TERLIHAT (area drop) ===== */
-#plateSvg { position:absolute; top:10px; left:10px; width:600px; height:600px; z-index:5; }
+#plateSvg { position:absolute; top:3.5%; left:3.5%; width:93%; height:93%; z-index:5; }
 .sector { fill:transparent; cursor:pointer; transition:fill .15s; }
 .sector.highlight { fill:rgba(45,106,79,.15); }
 .sector.wrong { fill:rgba(214,40,40,.25); }
@@ -78,112 +143,125 @@ body { font-family:'Segoe UI',sans-serif; background:linear-gradient(135deg,#a8e
 /* label & emoji di tengah tiap bagian */
 .zoneContent { position:absolute; display:flex; flex-direction:column; align-items:center;
                transform:translate(-50%,-50%); pointer-events:none; z-index:7; text-align:center; }
-.zoneLabel { font-size:17px; font-weight:bold; color:#666; }
-.zonePorsi { font-size:13px; color:#aaa; }
-.zoneItems { font-size:44px; margin-top:8px; max-width:90%; }
+.zoneLabel { font-size:clamp(10px, 1.4vw, 17px); font-weight:bold; color:#666; }
+.zonePorsi { font-size:clamp(8px, 1vw, 13px); color:#aaa; }
+.zoneItems { font-size:clamp(24px, 3.4vw, 44px); margin-top:6px; max-width:90%; }
 
-#notification { margin-top:15px; min-height:50px; max-width:900px; width:100%; padding:12px; border-radius:12px; text-align:center; display:none; font-size:16px; }
+#notification { margin-top:15px; min-height:50px; max-width:900px; width:100%; padding:12px; border-radius:12px; text-align:center; display:none; font-size:clamp(12px, 1.4vw, 16px); }
 .notif-error { background:#fee2e2; color:#991b1b; display:block; }
 .notif-success { background:#dcfce7; color:#166534; display:block; }
 
 button.ctl { background:#2d6a4f; color:#fff; border:none; padding:10px 26px; border-radius:25px; cursor:pointer; font-weight:bold; margin-top:12px; }
 
-#winOverlay { position:fixed; inset:0; background:rgba(0,0,0,.6); display:none; align-items:center; justify-content:center; z-index:100; }
-.winCard { background:#fff; padding:40px; border-radius:22px; text-align:center; max-width:420px; animation:popUp .4s ease; }
+#winOverlay { position:fixed; inset:0; background:rgba(0,0,0,.6); display:none; align-items:center; justify-content:center; z-index:100; padding:16px; }
+.winCard { background:#fff; padding:clamp(24px, 4vw, 40px); border-radius:22px; text-align:center; max-width:420px; animation:popUp .4s ease; }
 @keyframes popUp { from{transform:scale(.5); opacity:0;} to{transform:scale(1); opacity:1;} }
 .winCard h2 { color:#2d6a4f; margin:10px 0; }
 .winCard p { color:#444; font-size:14px; line-height:1.7; margin-bottom:20px; }
 
 .food.dragging { opacity:.4; transform:scale(.9); cursor:grabbing; }
 .zoneItems .popIn { display:inline-block; animation:popIn .3s ease; }
-
-@media (max-width:1400px) {
-  #plateWrap { width:520px; height:520px; }
-  #plate { width:480px; height:480px; }
-  #plateSvg { width:480px; height:480px; }
-  #foodTray { width:520px; }
-  .zoneLabel { font-size:14px; }
-  .zoneItems { font-size:34px; }
-}
 </style>
 </head>
 <body>
 
+<!-- ================= HALAMAN 1 ================= -->
 <div id="startScreen">
-  <div class="startCard">
-    <img src="ipb.png" alt="Logo IPB"
-     style="width:100px; height:auto; margin-bottom:15px;"
-     onerror="this.style.display='none'">
-    <div style="font-size:110px">🍽️</div>
-    <h1>Isi Piringku</h1>
-    <p>
-      Belajar makan sehat sesuai pedoman gizi seimbang:<br>
-      🍚 Makanan Pokok 1/3 &nbsp;•&nbsp; 🥬 Sayuran 1/3<br>
-      🍗 Lauk-Pauk 1/6 &nbsp;•&nbsp; 🍎 Buah 1/6<br><br>
-      Geser atau ketuk makanan ke bagian piring yang tepat.<br>
-      Isi <b>semua 4 bagian piring</b> untuk menang!<br>
-      Hati-hati ada makanan jebakan!
-    </p>
-    <button id="btnStart">MULAI BERMAIN</button>
+  <!-- sisi kiri: gambar full background -->
+  <div class="startLeft"></div>
+
+  <!-- sisi kanan: kotak keterangan -->
+  <div class="startRight">
+    <div class="startCard">
+      <div class="emojiBesar">🍽️</div>
+      <h1>Isi Piringku</h1>
+      <p>
+        Belajar makan sehat <br>
+        sesuai pedoman gizi seimbang:<br>
+        🍚 Makanan Pokok 1/3 &nbsp;•&nbsp; 🥬 Sayuran 1/3<br>
+        🍗 Lauk-Pauk 1/6 &nbsp;•&nbsp; 🍎 Buah 1/6<br><br>
+        <!-- Geser atau ketuk makanan ke bagian piring yang tepat.<br>
+        Isi <b>semua 4 bagian piring</b> untuk menang!<br>
+        Hati-hati ada makanan jebakan! -->
+      </p>
+      <button id="btnStart">MULAI BERMAIN</button>
+    </div>
   </div>
 </div>
 
+<!-- ================= HALAMAN 2 ================= -->
 <div id="gameScreen">
-  <h1 style="color:#2d6a4f">🍽️ Isi Piringku!</h1>
+  <h1>🍽️ Isi Piringku!</h1>
   <div id="gameArea">
     <div id="foodTray">
       <h3>🧺 Nampan Makanan</h3>
       <div id="foods"></div>
     </div>
-    <div id="plateWrap">
-      <div id="plate"></div>
 
-      <!-- Area drop tak terlihat (4 sektor) + garis titik-titik -->
-      <svg id="plateSvg" viewBox="0 0 100 100">
-
-        <!-- ===== SEKTOR TAK TERLIHAT (hanya untuk klik & drop) ===== -->
-        <!-- Makanan Pokok 1/3 : kiri-atas -->
-        <path class="sector" id="zPokok" data-kat="pokok"
-              d="M 50 50 L 50 7 A 43 43 0 0 0 12.78 71.5 Z"/>
-        <!-- Sayuran 1/3 : kanan-atas -->
-        <path class="sector" id="zSayur" data-kat="sayur"
-              d="M 50 50 L 50 7 A 43 43 0 0 1 87.22 71.5 Z"/>
-        <!-- Lauk-Pauk 1/6 : kiri-bawah -->
-        <path class="sector" id="zLauk" data-kat="lauk"
-              d="M 50 50 L 12.78 71.5 A 43 43 0 0 0 50 93 Z"/>
-        <!-- Buah-Buahan 1/6 : kanan-bawah -->
-        <path class="sector" id="zBuah" data-kat="buah"
-              d="M 50 50 L 87.22 71.5 A 43 43 0 0 1 50 93 Z"/>
-
-        <!-- ===== GARIS TITIK-TITIK (seperti gambar) ===== -->
-        <!-- garis vertikal dari atas ke bawah -->
-        <line class="dotline" x1="50" y1="5" x2="50" y2="95"/>
-        <!-- garis miring dari tengah ke kiri-bawah -->
-        <line class="dotline" x1="50" y1="50" x2="12.78" y2="71.5"/>
-        <!-- garis miring dari tengah ke kanan-bawah -->
-        <line class="dotline" x1="50" y1="50" x2="87.22" y2="71.5"/>
-      </svg>
-
-      <!-- Label & isi di tengah tiap bagian -->
-      <div class="zoneContent" style="left:31%; top:32%;">
-        <span class="zoneLabel">Makanan Pokok</span>
-        <span class="zonePorsi">1/3</span>
-        <div class="zoneItems" id="iPokok"></div>
+    <!-- kolom kanan: petunjuk + piring -->
+    <div>
+      <!-- ===== PETUNJUK PERMAINAN (di atas piring) ===== -->
+      <div id="petunjukWrap">
+        <button id="btnPetunjuk" onclick="togglePetunjuk()">📖 Petunjuk Permainan (klik untuk buka/tutup)</button>
+        <div id="isiPetunjuk">
+          <b>Cara bermain:</b>
+          <ul>
+            <li>📅 Piring dibagi 4 bagian: <b>Makanan Pokok 1/3</b>, <b>Sayuran 1/3</b>, <b>Lauk-Pauk 1/6</b>, dan <b>Buah-Buahan 1/6</b>.</li>
+            <li>🖱️ <b>Di laptop</b>: geser (drag &amp; drop) makanan dari nampan ke bagian piring yang tepat.</li>
+            <li>👆 <b>Di HP</b>: ketuk makanan satu kali (akan bertanda merah), lalu ketuk bagian piring tujuannya.</li>
+            <li>✅ Jika benar, makanan muncul di piring. Isi <b>semua 4 bagian</b> untuk menang!</li>
+            <li>⚠️ Hati-hati, ada <b>makanan jebakan</b> yang tidak termasuk Isi Piringku. Perhatikan penjelasan jika salah.</li>
+          </ul>
+        </div>
       </div>
-      <div class="zoneContent" style="left:69%; top:32%;">
-        <span class="zoneLabel">Sayuran</span>
-        <span class="zonePorsi">1/3</span>
-        <div class="zoneItems" id="iSayur"></div>
-      </div>
-      <div class="zoneContent" style="left:30%; top:74%;">
-        <span class="zoneLabel">Lauk-Pauk</span>
-        <span class="zonePorsi">1/6</span>
-        <div class="zoneItems" id="iLauk"></div>
-      </div>
-      <div class="zoneContent" style="left:70%; top:74%;">
-        <span class="zoneLabel">Buah-Buahan</span>
-        <span class="zonePorsi">1/</span>
-        <div class="zoneItems" id="iBuah"></div>
+
+      <div id="plateWrap">
+        <div id="plate"></div>
+
+        <!-- Area drop tak terlihat (4 sektor) + garis titik-titik -->
+        <svg id="plateSvg" viewBox="0 0 100 100">
+
+          <!-- ===== SEKTOR TAK TERLIHAT (hanya untuk klik & drop) ===== -->
+          <!-- Makanan Pokok 1/3 : kiri-atas -->
+          <path class="sector" id="zPokok" data-kat="pokok"
+                d="M 50 50 L 50 7 A 43 43 0 0 0 12.78 71.5 Z"/>
+          <!-- Sayuran 1/3 : kanan-atas -->
+          <path class="sector" id="zSayur" data-kat="sayur"
+                d="M 50 50 L 50 7 A 43 43 0 0 1 87.22 71.5 Z"/>
+          <!-- Lauk-Pauk 1/6 : kiri-bawah -->
+          <path class="sector" id="zLauk" data-kat="lauk"
+                d="M 50 50 L 12.78 71.5 A 43 43 0 0 0 50 93 Z"/>
+          <!-- Buah-Buahan 1/6 : kanan-bawah -->
+          <path class="sector" id="zBuah" data-kat="buah"
+                d="M 50 50 L 87.22 71.5 A 43 43 0 0 1 50 93 Z"/>
+
+          <!-- ===== GARIS TITIK-TITIK (seperti gambar) ===== -->
+          <line class="dotline" x1="50" y1="5" x2="50" y2="95"/>
+          <line class="dotline" x1="50" y1="50" x2="12.78" y2="71.5"/>
+          <line class="dotline" x1="50" y1="50" x2="87.22" y2="71.5"/>
+        </svg>
+
+        <!-- Label & isi di tengah tiap bagian -->
+        <div class="zoneContent" style="left:31%; top:32%;">
+          <span class="zoneLabel">Makanan Pokok</span>
+          <span class="zonePorsi">1/3</span>
+          <div class="zoneItems" id="iPokok"></div>
+        </div>
+        <div class="zoneContent" style="left:69%; top:32%;">
+          <span class="zoneLabel">Sayuran</span>
+          <span class="zonePorsi">1/3</span>
+          <div class="zoneItems" id="iSayur"></div>
+        </div>
+        <div class="zoneContent" style="left:30%; top:74%;">
+          <span class="zoneLabel">Lauk-Pauk</span>
+          <span class="zonePorsi">1/6</span>
+          <div class="zoneItems" id="iLauk"></div>
+        </div>
+        <div class="zoneContent" style="left:70%; top:74%;">
+          <span class="zoneLabel">Buah-Buahan</span>
+          <span class="zonePorsi">1/6</span>
+          <div class="zoneItems" id="iBuah"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -241,7 +319,7 @@ var foodData = [
   { emoji:"🍩", nama:"Donat",           kat:"jebakan", alasan:"Digoreng dan bergula, bukan bagian Isi Piringku." },
   { img:"gorengan.png", nama:"Gorengan",      kat:"jebakan", alasan:"Tinggi minyak, kurangi makanan gorengan!" },
   { emoji:"🍔", nama:"Hamburger",       kat:"jebakan", alasan:"Junk food tinggi lemak dan garam." },
-  { emoji:"🌭", nama:"Sosis",           kat:"jebakan", alasan:"D olahan tinggi garam dan pengawet." },
+  { emoji:"🌭", nama:"Sosis",           kat:"jebakan", alasan:"Daging olahan tinggi garam dan pengawet." },
   { img:"cokelat.png",  nama:"Cokelat Batang", kat:"jebakan", alasan:"Tinggi gula dan lemak." },
   { emoji:"🍦", nama:"Es Krim",         kat:"jebakan", alasan:"Tinggi gula dan lemak susu." },
   { emoji:"🥤", nama:"Minuman Manis",   kat:"jebakan", alasan:"Tinggi gula, pilih air putih!" },
@@ -440,6 +518,11 @@ function proses(zone, el) {
     notif.textContent = pesan;
     notif.className = "notif-error";
   }
+}
+
+// ================= PETUNJUK (buka/tutup) =================
+function togglePetunjuk() {
+  document.getElementById("isiPetunjuk").classList.toggle("buka");
 }
 
 // ================= RESET =================

@@ -5,6 +5,54 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Isi Piringku</title>
 <style>
+
+/* ===== POP UP EDUKASI MAKANAN ===== */
+#infoOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 160;
+  padding: 16px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .3s ease, visibility .3s ease;
+}
+#infoOverlay.buka { opacity: 1; visibility: visible; }
+#infoCard {
+  background: #fff;
+  border-radius: 22px;
+  padding: 24px;
+  max-width: 380px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0,0,0,.3);
+  border: 3px solid #2a9d8f;
+  transform: scale(.7) translateY(30px);
+  opacity: 0;
+  transition: transform .35s cubic-bezier(.34,1.56,.64,1), opacity .3s ease;
+}
+#infoOverlay.buka #infoCard { transform: scale(1) translateY(0); opacity: 1; }
+#infoCard.benar { border-color: #2a9d8f; }
+#infoCard.salad { border-color: #e63946; }
+#infoEmoji { font-size: 60px; line-height: 1.2; }
+#infoJudul { margin: 8px 0 4px; font-size: clamp(18px, 2.4vw, 24px); }
+#infoCard.benar #infoJudul { color: #2a9d8f; }
+#infoCard.salad #infoJudul { color: #e63946; }
+#infoTeks  { font-size: clamp(13px, 1.5vw, 16px); color:#444; line-height:1.7; }
+#btnLanjutInfo {
+  margin-top: 16px;
+  background:#2d6a4f; color:#fff; border:none;
+  padding:10px 36px; font-size:15px; font-weight:bold;
+  border-radius:25px; cursor:pointer;
+  transition:background .2s, transform .2s;
+}
+#btnLanjutInfo:hover { background:#1b4332; transform:scale(1.05); }
+
+
 * { margin:0; padding:0; box-sizing:border-box; }
 body { font-family:'Segoe UI',sans-serif; background:linear-gradient(135deg,#a8e6cf,#dcedc1); min-height:100vh; }
 
@@ -539,57 +587,143 @@ button.ctl:hover { background:#1b4332; transform:scale(1.05); }
 <!-- wadah konfeti -->
 <div id="confetiWrap"></div>
 
+<!-- ===== POP UP EDUKASI MAKANAN ===== -->
+<div id="infoOverlay">
+  <div id="infoCard">
+    <div id="infoEmoji">🍎</div>
+    <h3 id="infoJudul">Tahukah Kamu?</h3>
+    <p id="infoTeks"></p>
+    <button id="btnLanjutInfo" onclick="tutupInfo()">Oke, Mengerti! 👍</button>
+  </div>
+</div>
+
+
 
 <script>
+
+  // ================= POP UP EDUKASI =================
+var infoAntrian = null;   // menahan flag menang jika ada
+
+function tampilkanInfo(f, benar) {
+  var card = document.getElementById("infoCard");
+  var emoji = f.img
+    ? "<img src='" + f.img + "' style='width:70px;height:70px;object-fit:contain;'>"
+    : f.emoji;
+
+  document.getElementById("infoEmoji").innerHTML = emoji;
+  document.getElementById("infoJudul").textContent = f.nama;
+  document.getElementById("infoTeks").textContent = f.info;
+  card.className = benar ? "benar" : "salad";
+  document.getElementById("infoOverlay").classList.add("buka");
+}
+
+function tutupInfo() {
+  document.getElementById("infoOverlay").classList.remove("buka");
+  mainkanSuaraKlik();
+  // jika pemain baru saja menang, tampilkan pop up kemenangan SETELAH pop up edukasi ditutup
+  if (infoAntrian === "menang") {
+    infoAntrian = null;
+    mainkanSuaraMenang();
+    ledakanKonfeti();
+    var ov = document.getElementById("winOverlay");
+    ov.style.display = "flex";
+    ov.classList.add("aktif");
+  }
+}
+
+// ================= DATA MAKANAN =================
+// Jika tidak ada emoji yang cocok, gunakan img:"namafile.png"
+// (file gambar diletakkan di folder yang sama dengan index.html)
 // ================= DATA MAKANAN =================
 // Jika tidak ada emoji yang cocok, gunakan img:"namafile.png"
 // (file gambar diletakkan di folder yang sama dengan index.html)
 var foodData = [
   // ===== MAKANAN POKOK =====
-  { emoji:"🍚", nama:"Nasi Putih",   kat:"pokok" },
-  { emoji:"🍠", nama:"Ubi Jalar",    kat:"pokok" },
-  { emoji:"🌽", nama:"Jagung",       kat:"pokok" },
-  { emoji:"🥔", nama:"Kentang",      kat:"pokok" },
-  { emoji:"🍞", nama:"Roti Tawar",   kat:"pokok" },
+  { emoji:"🍚", nama:"Nasi Putih", kat:"pokok",
+    info:"Nasi adalah sumber karbohidrat yang memberi energi untuk bermain dan belajar! Pilih porsi secukupnya ya." },
+  { emoji:"🍠", nama:"Ubi Jalar", kat:"pokok",
+    info:"Ubi jalar kaya serat dan vitamin A yang bagus untuk kesehatan mata. Warnanya oranye cerah karena beta-karoten!" },
+  { emoji:"🌽", nama:"Jagung", kat:"pokok",
+    info:"Jagung mengandung karbohidrat dan lutein, zat yang menyehatkan mata. Jagung rebus, siapa yang tak suka?" },
+  { emoji:"🥔", nama:"Kentang", kat:"pokok",
+    info:"Kentang mengandung karbohidrat dan vitamin C. Direbus atau dipanggang lebih sehat daripada digoreng!" },
+  { emoji:"🍞", nama:"Roti Tawar", kat:"pokok",
+    info:"Roti gandum mengandung karbohidrat dan serat yang membantu pencernaan kita lancar." },
 
   // ===== LAUK-PAUK =====
-  // ===== LAUK-PAUK =====
-  { emoji:"🍗", nama:"Ayam",         kat:"lauk" },
-  { emoji:"🥩", nama:"Daging Sapi",  kat:"lauk" },   // ← TAMBAHKAN INI
-  { emoji:"🍖", nama:"Daging Rebus", kat:"lauk" },   // ← TAMBAHKAN INI (opsional)
-  { emoji:"🐟", nama:"Ikan",         kat:"lauk" },
-  { emoji:"🍳", nama:"Telur Dadar",  kat:"lauk" },
-  { img:"tempe.png",  nama:"Tempe",        kat:"lauk" },
-  { img:"tahu.png",   nama:"Tahu",         kat:"lauk" },
-  { emoji:"🫘", nama:"Kacang Merah", kat:"lauk" },
-
+  { emoji:"🍗", nama:"Ayam", kat:"lauk",
+    info:"Ayam kaya protein yang membangun otot dan membuat tubuh kuat. Bagian kulitnya tinggi lemak, sebaiknya dilepas ya!" },
+  { emoji:"🥩", nama:"Daging Sapi", kat:"lauk",
+    info:"Daging sapi kaya protein dan zat besi yang mencegah kurang darah (anemia), supaya badan tidak lemas." },
+  { emoji:"🍖", nama:"Daging Rebus", kat:"lauk",
+    info:"Daging rebus lebih sehat daripada digoreng karena rendah minyak, tapi tetap lembut dan enak!" },
+  { emoji:"🐟", nama:"Ikan", kat:"lauk",
+    info:"Ikan mengandung omega-3 yang membuat otak cerdas dan mata sehat. Ikan segar lebih baik daripada ikan asin!" },
+  { emoji:"🍳", nama:"Telur Dadar", kat:"lauk",
+    info:"Telur kaya protein dan kolin yang bagus untuk daya ingat. Putih telur mengandung protein terbaik!" },
+  { img:"tempe.png", nama:"Tempe", kat:"lauk",
+    info:"Tempe adalah protein khas Indonesia! Fermentasi kedelai membuatnya baik untuk pencernaan." },
+  { img:"tahu.png", nama:"Tahu", kat:"lauk",
+    info:"Tahu terbuat dari kedelai, kaya protein dan kalsium yang membuat tulang dan gigi kuat." },
+  { emoji:"🫘", nama:"Kacang Merah", kat:"lauk",
+    info:"Kacang merah kaya protein nabati dan zat besi. Makanannya favorit agar tidak mudah lelah!" },
 
   // ===== SAYURAN =====
-  { emoji:"🥬", nama:"Bayam",        kat:"sayur" },
-  { emoji:"🥕", nama:"Wortel",       kat:"sayur" },
-  { emoji:"🥦", nama:"Brokoli",      kat:"sayur" },
-  { img:"kacang-panjang.png", nama:"Kacang Panjang", kat:"sayur" },
-  { emoji:"🥒", nama:"Timun",        kat:"sayur" },
-  { img:"sawi.png",   nama:"Sawi Hijau",   kat:"sayur" },
+  { emoji:"🥬", nama:"Bayam", kat:"sayur",
+    info:"Bayam kaya zat besi dan vitamin — makanan pahlawan! Bagus untuk darah dan tubuh yang kuat." },
+  { emoji:"🥕", nama:"Wortel", kat:"sayur",
+    info:"Wortel kaya vitamin A untuk kesehatan mata. Karena itulah kelinci yang suka wortel punya mata tajam!" },
+  { emoji:"🥦", nama:"Brokoli", kat:"sayur",
+    info:"Brokoli kaya vitamin C yang melawan penyakit dan menjaga daya tahan tubuh tetap prima." },
+  { img:"kacang-panjang.png", nama:"Kacang Panjang", kat:"sayur",
+    info:"Kacang panjang kaya serat dan protein nabati yang baik untuk pencernaan." },
+  { emoji:"🥒", nama:"Timun", kat:"sayur",
+    info:"Timun hampir seluruhnya terdiri dari air! Menyegarkan tubuh dan membantu kita tetap terhidrasi." },
+  { img:"sawi.png", nama:"Sawi Hijau", kat:"sayur",
+    info:"Sawi hijau kaya kalsium dan vitamin K untuk tulang yang kuat, sekeras apapun melompat!" },
 
   // ===== BUAH-BUAHAN =====
-  { emoji:"🍌", nama:"Pisang",       kat:"buah" },
-  { emoji:"🍉", nama:"Semangka",     kat:"buah" },
-  { img:"pepaya.png", nama:"Pepaya",       kat:"buah" },
-  { emoji:"🍎", nama:"Apel",         kat:"buah" },
-  { img:"mangga.png", nama:"Mangga",       kat:"buah" },
-  { emoji:"🍊", nama:"Jeruk",        kat:"buah" },
+  { emoji:"🍌", nama:"Pisang", kat:"buah",
+    info:"Pisang kaya kalium yang baik untuk otot dan jantung. Camilan atlet sebelum olahraga!" },
+  { emoji:"🍉", nama:"Semangka", kat:"buah",
+    info:"Semangka 92% terdiri dari air — buah yang paling menyegarkan di hari yang panas!" },
+  { img:"pepaya.png", nama:"Pepaya", kat:"buah",
+    info:"Pepaya kaya vitamin A dan C, serta enzim papain yang membantu melancarkan pencernaan." },
+  { emoji:"🍎", nama:"Apel", kat:"buah",
+    info:"Apel kaya serat dan antioksidan — 'satu apel sehari menjauhkan saya dari dokter'!" },
+  { img:"mangga.png", nama:"Mangga", kat:"buah",
+    info:"Mangga kaya vitamin C dan A untuk daya tahan tubuh dan mata yang sehat. Raja buah Indonesia!" },
+  { emoji:"🍊", nama:"Jeruk", kat:"buah",
+    info:"Jeruk kaya vitamin C yang melindungi tubuh dari flu dan batuk. Cocok diminum jusnya saat hujan!" },
 
   // ===== MAKANAN JEBAKAN =====
-  { img:"keripik.png", nama:"Keripik",        kat:"jebakan", alasan:"Tinggi garam dan minyak, pilih kentang rebus!" },
-  { emoji:"🍩", nama:"Donat",           kat:"jebakan", alasan:"Digoreng dan bergula, bukan bagian Isi Piringku." },
-  { img:"gorengan.png", nama:"Gorengan",      kat:"jebakan", alasan:"Tinggi minyak, kurangi makanan gorengan!" },
-  { emoji:"🍔", nama:"Hamburger",       kat:"jebakan", alasan:"Junk food tinggi lemak dan garam." },
-  { emoji:"🌭", nama:"Sosis",           kat:"jebakan", alasan:"Daging olahan tinggi garam dan pengawet." },
-  { img:"cokelat.png",  nama:"Cokelat Batang", kat:"jebakan", alasan:"Tinggi gula dan lemak." },
-  { emoji:"🍦", nama:"Es Krim",         kat:"jebakan", alasan:"Tinggi gula dan lemak susu." },
-  { emoji:"🥤", nama:"Minuman Manis",   kat:"jebakan", alasan:"Tinggi gula, pilih air putih!" },
-  { emoji:"🍰", nama:"Kue",             kat:"jebakan", alasan:"Makanan manis berlemak." }
+  { img:"keripik.png", nama:"Keripik", kat:"jebakan",
+    alasan:"Tinggi garam dan minyak, pilih kentang rebus!",
+    info:"Keripik tinggi garam dan minyak. Terlalu banyak garam bisa membuat darah tinggi. Sesekali boleh, tapi jangan sering ya!" },
+  { emoji:"🍩", nama:"Donat", kat:"jebakan",
+    alasan:"Digoreng dan bergula, bukan bagian Isi Piringku.",
+    info:"Donat digoreng dalam banyak minyak dan dilapisi gula. Terlalu banyak gula bisa membuat gigi berlubang!" },
+  { img:"gorengan.png", nama:"Gorengan", kat:"jebakan",
+    alasan:"Tinggi minyak, kurangi makanan gorengan!",
+    info:"Gorengan menyerap banyak minyak. Terlalu sering makan gorengan bisa membuat berat badan berlebih." },
+  { emoji:"🍔", nama:"Hamburger", kat:"jebakan",
+    alasan:"Junk food tinggi lemak dan garam.",
+    info:"Burger cepat saji biasanya tinggi lemak dan garam. Lebih baik buat sendiri roti isi sayur di rumah!" },
+  { emoji:"🌭", nama:"Sosis", kat:"jebakan",
+    alasan:"Daging olahan tinggi garam dan pengawet.",
+    info:"Sosis adalah daging olahan yang tinggi garam dan pengawet. Pilih ayam atau ikan segar untuk lauk!" },
+  { img:"cokelat.png", nama:"Cokelat Batang", kat:"jebakan",
+    alasan:"Tinggi gula dan lemak.",
+    info:"Cokelat batang mengandung banyak gula dan lemak. Gigi bisa berlubang kalau terlalu sering makan manis!" },
+  { emoji:"🍦", nama:"Es Krim", kat:"jebakan",
+    alasan:"Tinggi gula dan lemak susu.",
+    info:"Es krim memang lezat, tapi tinggi gula dan lemak. Jadi makanan jebakan, bukan isi piring sehat!" },
+  { emoji:"🥤", nama:"Minuman Manis", kat:"jebakan",
+    alasan:"Tinggi gula, pilih air putih!",
+    info:"Satu botol minuman manis bisa mengandung 8-10 sendok teh gula! Air putih tetap yang terbaik untuk tubuh." },
+  { emoji:"🍰", nama:"Kue", kat:"jebakan",
+    alasan:"Makanan manis berlemak.",
+    info:"Kue tinggi gula, lemak, dan mungkin pewarna. Hanya boleh sesekali saat ada acara spesial ya!" }
 ];
 
 // ================= PETA NAMA =================
@@ -803,7 +937,7 @@ function proses(zone, el) {
   if (f.kat === target) {
     // ===== JAWABAN BENAR =====
     el.classList.add("placed");
-    mainkanSuaraBenar();          // ✅ suara "bling" di sini
+    mainkanSuaraBenar();
 
     if (f.img) {
       var gambar = document.createElement("img");
@@ -821,19 +955,17 @@ function proses(zone, el) {
     notif.textContent = "✅ Benar! " + f.nama + " masuk ke " + namaZona[target] + ".";
     notif.className = "notif-success";
 
+    // pop up edukasi muncul
     if (cekMenang()) {
-      setTimeout(function() {
-        mainkanSuaraMenang();     // 🎵 musik kemenangan
-        ledakanKonfeti();         // 🎊 konfeti + bintang
-        var ov = document.getElementById("winOverlay");
-        ov.style.display = "flex";
-        ov.classList.add("aktif");
-      }, 500);
+      infoAntrian = "menang";   // tunda pop up kemenangan
+      setTimeout(function() { tampilkanInfo(f, true); }, 400);
+    } else {
+      setTimeout(function() { tampilkanInfo(f, true); }, 400);
     }
 
   } else {
     // ===== JAWABAN SALAH =====
-    mainkanSuaraSalah();          // ❌ suara "bzzt" di sini
+    mainkanSuaraSalah();
 
     zone.classList.add("wrong");
     setTimeout(function() { zone.classList.remove("wrong"); }, 450);
@@ -847,7 +979,11 @@ function proses(zone, el) {
     }
     notif.textContent = pesan;
     notif.className = "notif-error";
+
+    // pop up edukasi muncul setelah sedikit jeda
+    setTimeout(function() { tampilkanInfo(f, false); }, 500);
   }
+
 }
 
 // ================= PETUNJUK (POP UP MODAL) =================

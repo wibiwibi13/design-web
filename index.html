@@ -553,12 +553,16 @@ var foodData = [
   { emoji:"🍞", nama:"Roti Tawar",   kat:"pokok" },
 
   // ===== LAUK-PAUK =====
+  // ===== LAUK-PAUK =====
   { emoji:"🍗", nama:"Ayam",         kat:"lauk" },
+  { emoji:"🥩", nama:"Daging Sapi",  kat:"lauk" },   // ← TAMBAHKAN INI
+  { emoji:"🍖", nama:"Daging Rebus", kat:"lauk" },   // ← TAMBAHKAN INI (opsional)
   { emoji:"🐟", nama:"Ikan",         kat:"lauk" },
   { emoji:"🍳", nama:"Telur Dadar",  kat:"lauk" },
   { img:"tempe.png",  nama:"Tempe",        kat:"lauk" },
   { img:"tahu.png",   nama:"Tahu",         kat:"lauk" },
   { emoji:"🫘", nama:"Kacang Merah", kat:"lauk" },
+
 
   // ===== SAYURAN =====
   { emoji:"🥬", nama:"Bayam",        kat:"sayur" },
@@ -735,6 +739,61 @@ function klikZona(zone) {
 }
 
 // ================= LOGIKA UTAMA =================
+// function proses(zone, el) {
+//   var idx = parseInt(el.getAttribute("data-idx"), 10);
+//   var f = shuffled[idx];
+//   var target = zone.getAttribute("data-kat");
+//   var notif = document.getElementById("notification");
+
+//   if (f.kat === target) {
+//     el.classList.add("placed");
+//      mainkanSuaraBenar(); 
+
+//     if (f.img) {
+//       var gambar = document.createElement("img");
+//       gambar.src = f.img;
+//       gambar.alt = f.nama;
+//       gambar.className = "popIn";
+//       document.getElementById(idItem[target]).appendChild(gambar);
+//     } else {
+//     //  mainkanSuaraSalah();   
+//       var span = document.createElement("span");
+//       span.textContent = f.emoji;
+//       span.className = "popIn";
+//       document.getElementById(idItem[target]).appendChild(span);
+//     }
+
+//     notif.textContent = "✅ Benar! " + f.nama + " masuk ke " + namaZona[target] + ".";
+//     notif.className = "notif-success";
+
+//         if (cekMenang()) {
+//       setTimeout(function() {
+//         mainkanSuaraMenang();     // musik kemenangan 🎵
+//         ledakanKonfeti();         // konfeti + bintang 🎊
+//         var ov = document.getElementById("winOverlay");
+//         ov.style.display = "flex";
+//         ov.classList.add("aktif");
+//       }, 500);
+//     }
+
+
+//   } else {
+//     zone.classList.add("wrong");
+//     setTimeout(function() { zone.classList.remove("wrong"); }, 450);
+
+//     var pesan;
+//     if (f.kat === "jebakan") {
+//       pesan = "❌ " + f.nama + ": " + f.alasan;
+//     } else {
+//       pesan = "❌ " + f.nama + " adalah " + namaKat[f.kat] +
+//               ", bukan untuk " + namaZona[target] + ".";
+//     }
+//     notif.textContent = pesan;
+//     notif.className = "notif-error";
+//   }
+// }
+
+// ================= LOGIKA UTAMA =================
 function proses(zone, el) {
   var idx = parseInt(el.getAttribute("data-idx"), 10);
   var f = shuffled[idx];
@@ -742,8 +801,9 @@ function proses(zone, el) {
   var notif = document.getElementById("notification");
 
   if (f.kat === target) {
+    // ===== JAWABAN BENAR =====
     el.classList.add("placed");
-     mainkanSuaraBenar(); 
+    mainkanSuaraBenar();          // ✅ suara "bling" di sini
 
     if (f.img) {
       var gambar = document.createElement("img");
@@ -761,18 +821,20 @@ function proses(zone, el) {
     notif.textContent = "✅ Benar! " + f.nama + " masuk ke " + namaZona[target] + ".";
     notif.className = "notif-success";
 
-        if (cekMenang()) {
+    if (cekMenang()) {
       setTimeout(function() {
-        mainkanSuaraMenang();     // musik kemenangan 🎵
-        ledakanKonfeti();         // konfeti + bintang 🎊
+        mainkanSuaraMenang();     // 🎵 musik kemenangan
+        ledakanKonfeti();         // 🎊 konfeti + bintang
         var ov = document.getElementById("winOverlay");
         ov.style.display = "flex";
         ov.classList.add("aktif");
       }, 500);
     }
 
-
   } else {
+    // ===== JAWABAN SALAH =====
+    mainkanSuaraSalah();          // ❌ suara "bzzt" di sini
+
     zone.classList.add("wrong");
     setTimeout(function() { zone.classList.remove("wrong"); }, 450);
 
@@ -851,7 +913,7 @@ function mainkanSuaraMenang() {
       osc.type = "triangle";
       osc.frequency.value = nada[i].f;
       var mulai = waktu + nada[i].t;
-      gain.gain.setValueAtTime(0.0001, mulai);
+      gain.gain.setValueAtTime(1, mulai);
       gain.gain.exponentialRampToValueAtTime(0.3, mulai + 0.02);
       gain.gain.exponentialRampToValueAtTime(0.0001, mulai + durasi[i]);
       osc.connect(gain); gain.connect(ctx.destination);
@@ -859,6 +921,52 @@ function mainkanSuaraMenang() {
     }
   } catch(e) { /* browser tidak mendukung, abaikan */ }
 }
+
+// suara "buzzer" saat jawaban salah (seperti kuis TV)
+function mainkanSuaraSalah() {
+  try {
+    var ctx = new (window.AudioContext || window.webkitAudioContext)();
+    var waktu = ctx.currentTime;
+
+    // dua nada rendah berurutan: "bzzt... bzzt"
+    var nada = [
+      { f: 180, t: 0.00, d: 0.18 },
+      { f: 140, t: 0.22, d: 0.30 }
+    ];
+
+    for (var i = 0; i < nada.length; i++) {
+      // osilator utama (nada buzz rendah)
+      var osc = ctx.createOscillator();
+      var gain = ctx.createGain();
+      osc.type = "sawtooth";              // bentuk gelombang kasar = terdengar "bzzt"
+      osc.frequency.value = nada[i].f;
+      var mulai = waktu + nada[i].t;
+      gain.gain.setValueAtTime(0.0001, mulai);
+      gain.gain.exponentialRampToValueAtTime(0.25, mulai + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, mulai + nada[i].d);
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.start(mulai); osc.stop(mulai + nada[i].d + 0.05);
+
+      // osilator kedua bergetar cepat untuk efek "getar-getar"
+      var osc2 = ctx.createOscillator();
+      var gain2 = ctx.createGain();
+      osc2.type = "square";
+      osc2.frequency.value = nada[i].f * 1.5;
+      // getar 30Hz pada volume
+      var lfo = ctx.createOscillator();
+      var lfoGain = ctx.createGain();
+      lfo.frequency.value = 30;
+      lfoGain.gain.value = 0.15;
+      lfo.connect(lfoGain); lfoGain.connect(gain2.gain);
+      gain2.gain.setValueAtTime(0.15, mulai);
+      gain2.gain.exponentialRampToValueAtTime(0.0001, mulai + nada[i].d);
+      osc2.connect(gain2); gain2.connect(ctx.destination);
+      osc2.start(mulai); osc2.stop(mulai + nada[i].d + 0.05);
+      lfo.start(mulai); lfo.stop(mulai + nada[i].d + 0.05);
+    }
+  } catch(e) { /* browser tidak mendukung, abaikan */ }
+}
+
 
 // suara "bling" saat jawaban benar
 function mainkanSuaraBenar() {
@@ -870,7 +978,7 @@ function mainkanSuaraBenar() {
     osc.type = "sine";
     osc.frequency.setValueAtTime(880, waktu);
     osc.frequency.setValueAtTime(1318, waktu + 0.08);
-    gain.gain.setValueAtTime(0.2, waktu);
+    gain.gain.setValueAtTime(1, waktu);
     gain.gain.exponentialRampToValueAtTime(0.0001, waktu + 0.25);
     osc.connect(gain); gain.connect(ctx.destination);
     osc.start(waktu); osc.stop(waktu + 0.3);
@@ -929,6 +1037,7 @@ function resetGame() {
 }
 
 function tutupWin() {
+    mainkanSuaraKlik(); 
   var ov = document.getElementById("winOverlay");
   ov.style.display = "none";
   ov.classList.remove("aktif");
@@ -938,15 +1047,53 @@ function tutupWin() {
   resetGame();
 }
 
+// suara "pop ceria" saat klik tombol mulai
+function mainkanSuaraKlik() {
+  try {
+    var ctx = new (window.AudioContext || window.webkitAudioContext)();
+    var waktu = ctx.currentTime;
+
+    // dua nada cepat naik: "poop-ting!" yang ceria
+    var nada = [
+      { f: 660,  t: 0.00, d: 0.10 },   // E5
+      { f: 990,  t: 0.08, d: 0.18 }    // B5
+    ];
+
+    for (var i = 0; i < nada.length; i++) {
+      var osc = ctx.createOscillator();
+      var gain = ctx.createGain();
+      osc.type = "triangle";
+      osc.frequency.value = nada[i].f;
+      var mulai = waktu + nada[i].t;
+      gain.gain.setValueAtTime(1, mulai);
+      gain.gain.exponentialRampToValueAtTime(0.35, mulai + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, mulai + nada[i].d);
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.start(mulai); osc.stop(mulai + nada[i].d + 0.05);
+    }
+  } catch(e) { /* browser tidak mendukung, abaikan */ }
+}
+
 
 document.getElementById("btnStart").addEventListener("click", function() {
+  mainkanSuaraKlik();   // ← TAMBAHKAN BARIS INI (paling atas)
+
   document.getElementById("startScreen").style.display = "none";
   document.getElementById("gameScreen").style.display = "flex";
   setupZona();
   resetGame();
-  // sapaan awal dari Daia saat masuk halaman 2
   setTimeout(klikDaia, 600);
 });
+
+// suara klik untuk semua tombol "Main Lagi" ber-class .ctl
+var tombolCtl = document.querySelectorAll("button.ctl");
+for (var t = 0; t < tombolCtl.length; t++) {
+  tombolCtl[t].addEventListener("click", function() {
+    mainkanSuaraKlik();
+  });
+}
+
+
 </script>
 
 </body>

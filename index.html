@@ -317,17 +317,6 @@ body { font-family:'Segoe UI',sans-serif; background:linear-gradient(135deg,#a8e
   background:radial-gradient(circle at center,#fff 55%,#ececec 78%,#dcdcdc 88%,#fff 92%,#e8e8e8 100%);
   box-shadow:0 15px 35px rgba(0,0,0,.22), inset 0 0 0 22px #fafafa; }
 
-/* ===== SENDOK & GARPU di samping kanan piring ===== */
-#sendokGarpu {
-  position:absolute;
-  right: -8%;
-  top: 50%;
-  transform: translateY(-50%);
-  width: clamp(36px, 6vw, 90px);
-  z-index: 8;
-  pointer-events: none;
-  filter: drop-shadow(0 6px 12px rgba(0,0,0,.25));
-}
 
 /* ===== SEKTOR TAK TERLIHAT (area drop) ===== */
 #plateSvg { position:absolute; top:3.5%; left:3.5%; width:93%; height:93%; z-index:5; }
@@ -443,8 +432,6 @@ button.ctl:hover { background:#1b4332; transform:scale(1.05); }
     right: 12px;
     bottom: calc(clamp(80px, 22vw, 110px) * 0.9);
   }
-  /* di HP, sendok-garpu dikecilkan & tidak menabrak piring */
-  #sendokGarpu { width: clamp(24px, 8vw, 40px); right: -6%; }
 }
 </style>
 </head>
@@ -512,10 +499,6 @@ button.ctl:hover { background:#1b4332; transform:scale(1.05); }
           <line class="dotline" x1="50" y1="50" x2="12.78" y2="71.5"/>
           <line class="dotline" x1="50" y1="50" x2="87.22" y2="71.5"/>
         </svg>
-
-        <!-- ===== SENDOK & GARPU di samping kanan piring ===== -->
-        <img id="sendokGarpu" src="sendok-garpu.png" alt="Sendok dan Garpu"
-             onerror="this.style.display='none';">
 
         <!-- Label & isi di tengah tiap bagian -->
         <div class="zoneContent" style="left:31%; top:32%;">
